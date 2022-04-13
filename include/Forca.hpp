@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
- 
+#include <fstream> 
+
 class Forca {
     public:
         enum Dificuldade{
@@ -34,7 +35,12 @@ class Forca {
          * @param scores o nome do arquivo que contém os scores
          * @see eh_valido
          */
-        Forca( std::string palavras, std::string scores );
+        Forca( std::string __palavras, std::string __scores ){
+            //ifstream rota_palavras;
+            //ifstream rota_scores;
+            //std::string palavra_atual;
+            //
+        };
        
  
         /**
