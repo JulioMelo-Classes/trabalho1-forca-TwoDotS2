@@ -42,11 +42,7 @@ public:
      * @see eh_valido
      */
 
-    Forca(std::string __palavras, std::string __scores)
-    {
-        m_arquivo_scores = __palavras;
-        m_arquivo_scores = __scores;
-    };
+    Forca(std::string __palavras, std::string __scores);
 
     /**
      * Printa o menu de informações do jogo da forca.
