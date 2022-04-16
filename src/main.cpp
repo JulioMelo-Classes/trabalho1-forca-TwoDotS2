@@ -1,11 +1,10 @@
-#include <iostream>
 #include "Forca.hpp"
+#include <iostream>
 
 using namespace std;
 int main(int argc, char *argv[])
 {
     Forca forca(argv[1], argv[2]);
-    forca.carregar_arquivos();
 
     auto valid = forca.eh_valido();
 
@@ -15,9 +14,11 @@ int main(int argc, char *argv[])
         exit(-1);
     }
 
+    forca.carregar_arquivos();
+
     /**
      * @brief Como os arquivos são válidos, calcula a frequência média de palavras no 'Arquivo de Palavras'
-     * 
+     *
      */
 
     forca.set_frequencia_media();
@@ -29,7 +30,7 @@ int main(int argc, char *argv[])
         if (/*iniciar jogo*/)
         {
             /*Seleciona dificuldade*/
-            forca.print_menu_dificuldade(/**/);
+            forca.print_menu_dificuldades(/**/);
             Forca::Dificuldade d;
             forca.set_dificuldade(d);
             while (true)
@@ -61,7 +62,7 @@ int main(int argc, char *argv[])
         }
         else if (/*mostrar score*/)
             /*mostrar score*/
-            else {// qualquer outro número sai do jogo}
+            else // qualquer outro número sai do jogo
                 break
     }
     return 0;
