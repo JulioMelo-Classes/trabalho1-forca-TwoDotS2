@@ -37,7 +37,7 @@ std::pair<bool, std::string> Forca::eh_valido()
     std::string palavra;
     std::string frequencia_string;
     // Contador de linhas do arquivo
-    int i;
+    int i = 1;
 
     while (fin >> palavra >> frequencia_string)
     {
