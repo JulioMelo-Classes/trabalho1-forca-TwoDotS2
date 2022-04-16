@@ -5,21 +5,31 @@ using namespace std;
 int main(int argc, char *argv[])
 {
     Forca forca(argv[1], argv[2]);
-    //O construtor vai carregar os arquivos
     forca.carregar_arquivos();
+
     auto valid = forca.eh_valido();
+
     if (!valid.first)
     { // sai do programa ao encontrar um erro
         cout << "Erro " << valid.second << endl;
         exit(-1);
     }
+
+    /**
+     * @brief Como os arquivos são válidos, calcula a frequência média de palavras no 'Arquivo de Palavras'
+     * 
+     */
+
+    forca.set_frequencia_media();
     while (true)
     {
         /*imprime o menu principal e a escolha do usuário*/
+        forca.print_menu_informacoes(/*opcao do user*/);
 
         if (/*iniciar jogo*/)
         {
             /*Seleciona dificuldade*/
+            forca.print_menu_dificuldade(/**/);
             Forca::Dificuldade d;
             forca.set_dificuldade(d);
             while (true)
@@ -51,7 +61,7 @@ int main(int argc, char *argv[])
         }
         else if (/*mostrar score*/)
             /*mostrar score*/
-            else // qualquer outro número sai do jogo
+            else {// qualquer outro número sai do jogo}
                 break
     }
     return 0;

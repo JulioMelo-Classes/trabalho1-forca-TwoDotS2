@@ -18,12 +18,14 @@ class Forca {
  
         Dificuldade m_dificuldade = Dificuldade::FACIL; //<! dificuldade atual do jogo
  
-        std::vector< std::string > m_palavras_do_jogo; //<! container “Palavras do Jogo”
+        
+        std::vector< std::string > m_palavras_do_jogo; //<! container “Palavras do Jogo”. Onde será armazenado as palavras do sorteio
         std::vector< char > m_letras_palpitadas; //<! contem as letras palpitadas pelo jogador
         std::string m_palavra_atual; //<! palavra sendo jogada “atualmente”
         std::string m_palavra_jogada; //<! palavra sendo jogada “atualmente” no formato “_ _ _ ... _ “
         
         int m_tentativas_restantes; //TODO: armazenar tentativas restantes
+        int m_frequencia_media; //Armazenar a frequência média de palavras
    
     public:
         /**
@@ -35,21 +37,44 @@ class Forca {
          * @param scores o nome do arquivo que contém os scores
          * @see eh_valido
          */
+
         Forca( std::string __palavras, std::string __scores ){
-            //ifstream rota_palavras;
-            //ifstream rota_scores;
-            //std::string palavra_atual;
-            //
+            m_arquivo_scores = __palavras;
+            m_arquivo_scores = __scores;
         };
        
- 
+        /**
+         * Printa o menu de informações do jogo da forca.
+         * (Opções 'Inicar Jogo', 'Ver scores anteriores' e 'Sair do jogo')
+         */
+
+        void print_menu_informacoes();
+
+        /**
+         * Printa os scores registrados em ./save/scores.txt
+         */
+        void print_scores_registrados();
+
+        /**
+         * Printa o menu das dificuldades do jogo da forca, caso o usuário
+         *  tenha selecionado a opção de iniciar o jogo.
+         * (Dificuldades: 'Fácil', 'Médio' e 'Difícil)
+         */
+
+        void print_menu_dificuldades();
+
+        /**
+         * Printa a user interface da forca baseada em m_palavra_jogada e m_palavra_atual
+         */
+        void print_forca_ui();
+
         /**
          * Valida os arquivos de entrada de acordo com as especificações.
          * Ao validar os arquivos, no caso de arquivos inválidos, este método deve retornar a 
          * razão correspondente de acordo com as especificações.
          * @return {T,""} se os arquivos estiverem válidos, {F,"razão"} caso contrário.
          */
-        std::pair<bool, std::string> eh_valido();
+        std::pair<bool, std::string> eh_valido( );
  
         /**
          * Carrega os arquivos de scores e palavras preenchendo **ao menos** a estrutura m_palavras
@@ -127,4 +152,21 @@ class Forca {
          */
         int get_tentativas_restantes();
 
-};
+        /**
+         * Definir o valor médio da frequência das palavras.
+         * 
+         */
+        void set_frequencia_media(){
+            m_frequencia_media = calcular_frequencia_media(m_palavras);
+        }
+
+        /**
+         * Uma vez que a lista de palavras já foi validada, é necessário fazer a
+         * o cálculo da média para o sorteio da palavra.
+         * @param palavras 
+         * @return int 
+         */
+
+        int calcular_frequencia_media( std::vector< std::pair<std::string, int> > palavras );
+        void sortear_palavras(Dificuldade dificuldade);
+};  

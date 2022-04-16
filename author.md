@@ -2,12 +2,12 @@
 
 Preencha os dados abaixo para identificar a autoria do trabalho.
 
-- Turma: *\<insira sua turma aqui>*
+- Turma: *\<IMD0030 - T01>*
 
-- Nome: *\<insira seu nome aqui>*
-- Email: *\<insira seu email aqui>*
+- Nome: *\<Afonso Julio Moreira Neto>*
+- Email: *\<09afonso09@gmail.com>*
 
-- Nome: *\<insira seu nome aqui>*
-- Email: *\<insira seu email aqui>*
+- Nome: *\<Ana Maria Gomes Holanda>*
+- Email: *\<ana.holanda.acad@gmail.com>*
 
 Repita os campos Nome e Email caso seja uma dupla
