@@ -36,7 +36,7 @@ void Forca::carregar_arquivos(){
   //Contador de linhas do arquivo
   int i;
   
-  while (fin >> palavra >> frequencia) {
+  while (fin >> palavra >> frequencia_string) {
     std::string upper = palavra;
     //transformando a palavra para caixa alta e salvando em "upper"
     transform(palavra.begin(),palavra.end(),upper.begin(),::toupper);
@@ -44,7 +44,7 @@ void Forca::carregar_arquivos(){
     //Se a palavra em caixa alta não estiver entre [A-Z], ou não for ' ' ou '-'. é disparada uma exceção
     //Para cada caractere de upper  
     for(char& ch :upper){
-      if((ch < 'A' || ch > 'Z') && ch!= ' ' && ch! '-'){
+      if((ch < 'A' || ch > 'Z') && ch!= ' ' && ch != '-'){
         throw std::runtime_error("Caractere inválido localizado na palavra " + palavra + "(linha" + std::to_string(i) + ")");  
       }
     }
