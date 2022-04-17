@@ -1,0 +1,6 @@
+Fácil; Julio; CARRO, CART, CORACAO; 10
+Fácil; Julio; CORACAO; 5
+Difícil; Isaac; ; -4
+Médio; Ramon; PROFESSOR, CASA, DISCORD; 60
+Médio; Jessica; COMER, DORMIR, ESTUDAR; 60
+Fácil; Ana; COBRA, COELHO, JANTAR; 10
