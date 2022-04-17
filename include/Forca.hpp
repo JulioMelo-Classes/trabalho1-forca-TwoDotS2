@@ -15,6 +15,9 @@ public:
 private:
     // TODO: armazenar os scores?
 
+    //<! Inversão do tipo do 'first' e do 'second' padrão
+    //<! https://www.geeksforgeeks.org/sorting-vector-of-pairs-in-c-set-1-sort-by-first-and-second/
+    //std::vector<std::pair<int, std::string>> m_palavras; //<!
     std::vector<std::pair<std::string, int>> m_palavras; //<! palavras e sua ocorrência no Corpus
 
     std::string m_arquivo_scores; //<! nome do arquivo contendo os scores
@@ -48,6 +51,9 @@ public:
         m_arquivo_scores = __scores;
     };
 
+    /////////////////////////////////////////////////////////////////////////
+    /////////// Menus
+    //////////////////////////////////////////////
     /**
      * Printa o menu de informações do jogo da forca.
      * (Opções 'Inicar Jogo', 'Ver scores anteriores' e 'Sair do jogo')
@@ -73,18 +79,29 @@ public:
      */
     void print_forca_ui();
 
-    /**
-     * Valida os arquivos de entrada de acordo com as especificações.
-     * Ao validar os arquivos, no caso de arquivos inválidos, este método deve retornar a
-     * razão correspondente de acordo com as especificações.
-     * @return {T,""} se os arquivos estiverem válidos, {F,"razão"} caso contrário.
-     */
-    std::pair<bool, std::string> eh_valido();
+    /////////////////////////////////////////////////////////////////////////
+    /////////// Validação
+    //////////////////////////////////////////////
 
     /**
      * Carrega os arquivos de scores e palavras preenchendo **ao menos** a estrutura m_palavras
      */
     void carregar_arquivos();
+
+    /**
+     * ??? 
+     * carregar_arquivos() chamado no escopo de em eh_valido?
+     * ???
+     * 
+     * Valida os arquivos de entrada de acordo com as especificações.
+     * Ao validar os arquivos, no caso de arquivos inválidos, este método deve retornar a
+     * razão correspondente de acordo com as especificações.
+     * @return {T,""} se os arquivos estiverem válidos, {F,"razão"} caso contrário.
+     */
+
+    std::pair<bool, std::string> eh_valido();
+
+
 
     /**
      * Modifica a dificuldade do jogo.
@@ -161,6 +178,12 @@ public:
      * Definir o valor médio da frequência das palavras.
      *
      */
+
+
+    /////////////////////////////////////////////////////////////////////////
+    /////////// Sorteio
+    //////////////////////////////////////////////
+
     void set_frequencia_media()
     {
         m_frequencia_media = calcular_frequencia_media(m_palavras);
@@ -175,10 +198,23 @@ public:
 
     int calcular_frequencia_media(std::vector<std::pair<std::string, int>> palavras);
 
+    /**
+     * Define as palavras do jogo atual
+     */
     void sortear_palavras() 
     {
-        m_palavras_do_jogo = filtrar_palavras_por_dificuldade(m_dificuldade, m_arquivo_palavras, m_frequencia_media);
+        m_palavras_do_jogo = filtrar_palavras_por_dificuldade(m_dificuldade, m_palavras, m_frequencia_media);
     };
 
-    std::vector<std::string> filtrar_palavras_por_dificuldade(Dificuldade dificuldade, std::string arquivo_palavras, int frequencia_media);
+    /**
+     * Filtrar as palavras do jogo baseadas na dificuldade definida
+     * @param dificuldade dificuldade atual do jogo 
+     * @param palavras vetor de pares com as palavras e os íncidência de uso
+     * @param frequencia_media a frequêcia média das palavras utilizadas no arquivo base
+     * @return std::vector<std::string> 
+     */
+    std::vector<std::string> 
+    filtrar_palavras_por_dificuldade( Dificuldade dificuldade, std::vector<std::pair<std::string, int>> palavras, int frequencia_media );
+
+  
 };

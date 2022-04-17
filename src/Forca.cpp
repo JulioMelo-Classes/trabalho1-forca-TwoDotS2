@@ -5,9 +5,19 @@
 #include <fstream>
 #include <string>
 
+ void carregar_arquivos(){
+    //O std::sort, por padrão, utiliza o elemento 'first' da classe 'pair' para organizar
+    //std::sort(palavras.begin(), palavras.edn())
+ }
+
 std::pair<bool, std::string> eh_valido()
 {
     return std::pair<bool, std::string>{};
+}
+
+bool sortbysec(const std::pair<int,int> &a, const std::pair<int,int> &b)
+{
+    return (a.second < b.second);
 }
 
 /**
@@ -33,7 +43,7 @@ int calcular_frequencia_media(std::vector<std::pair<std::string, int>> palavras)
     return frequencia;
 }
 
-std::vector<std::string> filtrar_palavras_por_dificuldade(Forca::Dificuldade dificuldade, std::string arquivo_palavras, int frequencia_media)
+std::vector<std::string> filtrar_palavras_por_dificuldade(Forca::Dificuldade dificuldade, std::vector<std::pair<std::string, int>> palavras, int frequencia_media)
 {
     std::vector<std::string> filtradas; //<! Vetor que vai receber as palavras diferentes, tratadas baseadas na dificuldade 
     int qtd_filtradas; //<! Armazenar o total de palavras a serem filtradas e adicionadas ao vetor
@@ -49,7 +59,6 @@ std::vector<std::string> filtrar_palavras_por_dificuldade(Forca::Dificuldade dif
     if(dificuldade == Forca::FACIL)
     {
         qtd_filtradas = 10;
-
     } 
     else if (dificuldade == Forca::MEDIO)
     {

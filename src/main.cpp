@@ -16,10 +16,9 @@ int main(int argc, char *argv[])
     }
 
     /**
-     * @brief Como os arquivos são válidos, calcula a frequência média de palavras no 'Arquivo de Palavras'
-     * 
+     * Como os arquivos são válidos, calcula a frequência média de palavras no 'Arquivo de Palavras'
      */
-
+    
     forca.set_frequencia_media();
     while (true)
     {
