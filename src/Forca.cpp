@@ -6,9 +6,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-
-// Biblioteca de exceções
-#include <stdexcept>
+#include <sstream>
 
 // Construtor
 // O valor das strings serão os caminhos para chegar no arquivo
@@ -33,7 +31,6 @@ std::pair<bool, std::string> Forca::eh_valido()
                                             "Nenhum arquivo de palavras foi encontrado em: " + m_arquivo_palavras);
     }
     // Lendo arquivo
-    std::string line;
     std::string palavra;
     std::string frequencia_string;
     // Contador de linhas do arquivo
@@ -41,33 +38,32 @@ std::pair<bool, std::string> Forca::eh_valido()
 
     while (fin >> palavra >> frequencia_string)
     {
-        // Se a palavra em caixa alta não estiver entre [A-Z], ou não for ' ' ou
-        // '-'. é disparada uma exceção Para cada caractere da palavra
+        // Se a palavra não estiver entre [A-Z], ou não for ' ' ou
+        // '-'. é enviada uma mensagem de erro
         for (char &ch : palavra)
         {
             if ((ch < 'A' || ch > 'Z') && (ch < 'a' || ch > 'z') && ch != ' ' && ch != '-')
             {
                 fin.close();
                 return std::pair<bool, std::string>(false, "Caractere inválido localizado na palavra " + palavra +
-                                                               "(linha" + std::to_string(i) + ")");
+                                                               " (linha " + std::to_string(i) + ")");
             }
         }
-        // Para cada caractere da frequencia, se ela não estiver entre [0-9], é
-        // disparada uma exceção
+        // Para cada caractere da frequencia, se ela não estiver entre [0-9], é enviada uma mensagem de erro
         for (char &ch : frequencia_string)
         {
             if (ch < '0' || ch > '9')
             {
                 fin.close();
                 return std::pair<bool, std::string>(false, "Frequência não é um número inteiro positivo na palavra " +
-                                                               palavra + "linha" + std::to_string(i) + ")");
+                                                               palavra + " (linha " + std::to_string(i) + ")");
             }
         }
 
         // Utilizando stoi() para transformar uma string em um inteiro
         int frequencia = stoi(frequencia_string);
 
-        // Se a palavra tem 4 ou menos caracteres é disparada uma exceção
+        // Se a palavra tem 4 ou menos caracteres é enviada uma mensagem de erro
         if (palavra.size() <= 4)
         {
             fin.close();
@@ -80,6 +76,86 @@ std::pair<bool, std::string> Forca::eh_valido()
     }
 
     fin.close();
+
+    // Abrindo arquivo de scores
+    fin.open(m_arquivo_scores);
+    // Verificar se conseguimos abrir o arquivo
+    if (!fin.is_open())
+    {
+        // Disparando mensagem de erro caso não consiga abrir o arquivo de scores
+        return std::pair<bool, std::string>(false, "Nenhum arquivo de scores foi encontrado em: " + m_arquivo_scores);
+    }
+
+    // resetando o contador
+    i = 1;
+    // Lendo as linhas do arquivo
+    std::string line;
+    while (std::getline(fin, line))
+    {
+        int semis = 0;
+        for (auto &ch : line)
+        {
+            if (ch == ';')
+            {
+                semis++;
+            }
+        }
+
+        if (semis != 3)
+        {
+            return std::pair<bool, std::string>(false, "Presença de " + std::to_string(semis) + " ';' na linha " +
+                                                           std::to_string(i) + " do arquivo de scores [Esperado: 3]");
+        }
+
+        std::istringstream linha(line);
+
+        std::string nivel;
+        std::getline(linha, nivel, ';');
+        if (nivel.size() == 0)
+        {
+            return std::pair<bool, std::string>(false, "Campo Nível de dificuldade vazio no arquivo de scores (linha " +
+                                                           std::to_string(i) + ")");
+        }
+
+        std::string nome;
+        std::getline(linha, nome, ';');
+        if (nome.size() == 0)
+        {
+            return std::pair<bool, std::string>(false, "Campo Nome vazio no arquivo de scores (linha " +
+                                                           std::to_string(i) + ")");
+        }
+
+        std::string palavras_acertadas;
+        std::getline(linha, palavras_acertadas, ';');
+
+        std::string score_s;
+        std::getline(linha, score_s);
+        if (nome.size() == 0)
+        {
+            return std::pair<bool, std::string>(false, "Campo Score vazio no arquivo de scores (linha " +
+                                                           std::to_string(i) + ")");
+        }
+
+        // try
+        // {
+        //     int score = stoi(score_s);
+        //     if (std::to_string(score) != score_s)
+        //     {
+        //         return std::pair<bool, std::string>(false, "Campo Score inválido no arquivo de scores (linha " +
+        //                                                        std::to_string(i) + ")");
+        //     }
+        // }
+        // catch (const std::exception &e)
+        // {
+        //     return std::pair<bool, std::string>(false, "Campo Score inválido no arquivo de scores (linha " +
+        //                                                    std::to_string(i) + ")");
+        // }
+
+        i++;
+    }
+
+    fin.close();
+
     return std::pair<bool, std::string>(true, "");
 }
 
@@ -101,11 +177,6 @@ void Forca::carregar_arquivos()
         // adicionando o par de palavra e frequencia no fim do vetor m_palavras
         m_palavras.push_back(std::pair<std::string, int>(upper, frequencia));
     }
-
-    // for (auto &par : m_palavras)
-    // {
-    //     std::cout << par.first << " (" << par.second << ")" << std::endl;
-    // }
 
     fin.close();
 }
