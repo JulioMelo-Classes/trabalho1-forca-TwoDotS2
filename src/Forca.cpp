@@ -1,4 +1,4 @@
-#include "Forca.hpp"
+#include "../include/Forca.hpp"
 // Bibliotecas para o transform
 #include <algorithm>
 #include <cctype>
@@ -110,39 +110,15 @@ void Forca::carregar_arquivos()
     fin.close();
 }
 
-std::pair<bool, std::string> eh_valido()
+void Forca::set_frequencia_media()
 {
-    std::ifstream fin;
-    fin.open(m_arquivo_palavras);
-
-    std::string line;
-    std::string palavra;
-    int frequencia;
-
-    while (fin >> palavra >> frequencia)
-    {
-        std::string upper = palavra;
-        // transformando a palavra para caixa alta e salvando em "upper"
-        transform(palavra.begin(), palavra.end(), upper.begin(), ::toupper);
-
-        // adicionando o par de palavra e frequencia no fim do vetor m_palavras
-        m_palavras.push_back(std::pair<std::string, int>(upper, frequencia));
-    }
-
-    //<! Verificação dos pares inseridos?
-    for (auto &par : m_palavras)
-    {
-        std::cout << par.first << " (" << par.second << ")" << std::endl;
-    }
-
-    fin.close();
+    m_frequencia_media = calcular_frequencia_media();
 }
 
-bool sortbysec(const std::pair<int, int> &a, const std::pair<int, int> &b)
+void Forca::sortear_palavras()
 {
-    return (a.second < b.second);
+     m_palavras_do_jogo = filtrar_palavras_por_dificuldade(m_dificuldade, m_palavras, m_frequencia_media);
 }
-
 /**
  * Calcula através de média aritimética a média de frequência das
  * palavras do banco
@@ -151,24 +127,24 @@ bool sortbysec(const std::pair<int, int> &a, const std::pair<int, int> &b)
  * @return int
  */
 
-int calcular_frequencia_media(std::vector<std::pair<std::string, int>> palavras)
+int Forca::calcular_frequencia_media()
 {
     int frequencia = 0;
     int media = 0;
 
-    for (int i = 0; i < (int)palavras.size(); i++)
+    for (int i = 0; i < (int)m_palavras.size(); i++)
     {
-        frequencia += palavras[i].second; //<! O valor da frequência da palavra[i] fica
+        frequencia += m_palavras[i].second; //<! O valor da frequência da palavra[i] fica
                                           // armazenado na segunda parte do std::pair
     }
 
-    media = frequencia / ((int)palavras.size()); //<! Média aritimética de inteiros, já que, nesse
+    media = frequencia / ((int)m_palavras.size()); //<! Média aritimética de inteiros, já que, nesse
                                                  // caso, não existe frequência com ponto flutuante
 
     return frequencia;
 }
 
-std::vector<std::string> /*Forca::*/ filtrar_palavras_por_dificuldade(Forca::Dificuldade dificuldade, std::vector<std::pair<std::string, int>> palavras, int frequencia_media)
+std::vector<std::string> Forca::filtrar_palavras_por_dificuldade(Forca::Dificuldade dificuldade, std::vector<std::pair<std::string, int>> palavras, int frequencia_media)
 {
     std::vector<std::string> filtradas; //<! Vetor que vai receber as palavras diferentes, tratadas
     // baseadas na dificuldade
@@ -207,7 +183,7 @@ std::vector<std::string> /*Forca::*/ filtrar_palavras_por_dificuldade(Forca::Dif
  * @param frequencia_media
  * @param qtd_filtradas
  */
-void inserir_filtradas_facil(std::vector<std::pair<std::string, int>> palavras, std::vector<std::string> &dest, int frequencia_media, int qtd_filtradas)
+void Forca::inserir_filtradas_facil(std::vector<std::pair<std::string, int>> palavras, std::vector<std::string> &dest, int frequencia_media, int qtd_filtradas)
 {
     for (int i = 0; i < (int)palavras.size(); i++)
     {
@@ -224,7 +200,7 @@ void inserir_filtradas_facil(std::vector<std::pair<std::string, int>> palavras, 
     }
 }
 
-void inserir_filtradas_medio(std::vector<std::pair<std::string, int>> palavras, std::vector<std::string> &dest, int frequencia_media, int qtd_filtradas)
+void Forca::inserir_filtradas_medio(std::vector<std::pair<std::string, int>> palavras, std::vector<std::string> &dest, int frequencia_media, int qtd_filtradas)
 {
     for (int i = 0; i < (int)palavras.size(); i++)
     {
@@ -255,7 +231,7 @@ void inserir_filtradas_medio(std::vector<std::pair<std::string, int>> palavras, 
     }
 }
 
-void inserir_filtradas_dificil(std::vector<std::pair<std::string, int>> palavras, std::vector<std::string> &dest, int frequencia_media, int qtd_filtradas)
+void Forca::inserir_filtradas_dificil(std::vector<std::pair<std::string, int>> palavras, std::vector<std::string> &dest, int frequencia_media, int qtd_filtradas)
 {
     for (int i = 0; i < (int)palavras.size(); i++)
     {

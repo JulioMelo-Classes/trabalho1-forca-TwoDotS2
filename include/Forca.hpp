@@ -15,9 +15,6 @@ public:
 private:
     // TODO: armazenar os scores?
 
-    //<! Inversão do tipo do 'first' e do 'second' padrão
-    //<! https://www.geeksforgeeks.org/sorting-vector-of-pairs-in-c-set-1-sort-by-first-and-second/
-    //std::vector<std::pair<int, std::string>> m_palavras; //<!
     std::vector<std::pair<std::string, int>> m_palavras; //<! palavras e sua ocorrência no Corpus
 
     std::string m_arquivo_scores; //<! nome do arquivo contendo os scores
@@ -180,10 +177,7 @@ public:
     /////////// Sorteio
     //////////////////////////////////////////////
 
-    void set_frequencia_media()
-    {
-        m_frequencia_media = calcular_frequencia_media(m_palavras);
-    }
+    void set_frequencia_media();
 
     /**
      * Uma vez que a lista de palavras já foi validada, é necessário fazer a
@@ -192,15 +186,12 @@ public:
      * @return int
      */
 
-    int calcular_frequencia_media(std::vector<std::pair<std::string, int>> palavras);
+    int calcular_frequencia_media();
 
     /**
      * Define as palavras do jogo atual
      */
-    void sortear_palavras() 
-    {
-        m_palavras_do_jogo = filtrar_palavras_por_dificuldade(m_dificuldade, m_palavras, m_frequencia_media);
-    };
+    void sortear_palavras();
 
     /**
      * Filtrar as palavras do jogo baseadas na dificuldade definida
@@ -212,5 +203,8 @@ public:
     std::vector<std::string> 
     filtrar_palavras_por_dificuldade( Dificuldade dificuldade, std::vector<std::pair<std::string, int>> palavras, int frequencia_media );
 
+    void inserir_filtradas_facil(std::vector<std::pair<std::string, int>> palavras, std::vector<std::string> &dest, int frequencia_media, int qtd_filtradas);
+    void inserir_filtradas_medio(std::vector<std::pair<std::string, int>> palavras, std::vector<std::string> &dest, int frequencia_media, int qtd_filtradas);
+    void inserir_filtradas_dificil(std::vector<std::pair<std::string, int>> palavras, std::vector<std::string> &dest, int frequencia_media, int qtd_filtradas);
   
 };
