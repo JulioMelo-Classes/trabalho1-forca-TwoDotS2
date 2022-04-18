@@ -102,10 +102,10 @@ void Forca::carregar_arquivos()
         m_palavras.push_back(std::pair<std::string, int>(upper, frequencia));
     }
 
-    for (auto &par : m_palavras)
-    {
-        std::cout << par.first << " (" << par.second << ")" << std::endl;
-    }
+    // for (auto &par : m_palavras)
+    // {
+    //     std::cout << par.first << " (" << par.second << ")" << std::endl;
+    // }
 
     fin.close();
 }
