@@ -45,7 +45,7 @@ std::pair<bool, std::string> Forca::eh_valido()
             if ((ch < 'A' || ch > 'Z') && (ch < 'a' || ch > 'z') && ch != ' ' && ch != '-')
             {
                 fin.close();
-                return std::pair<bool, std::string>(false, "Caractere inválido localizado na palavra " + palavra +
+                return std::pair<bool, std::string>(false, "Caractere inválido localizado na palavra :" + palavra +
                                                                " (linha " + std::to_string(i) + ")");
             }
         }
@@ -55,7 +55,7 @@ std::pair<bool, std::string> Forca::eh_valido()
             if (ch < '0' || ch > '9')
             {
                 fin.close();
-                return std::pair<bool, std::string>(false, "Frequência não é um número inteiro positivo na palavra " +
+                return std::pair<bool, std::string>(false, "Frequência não é um número inteiro positivo na palavra :" +
                                                                palavra + " (linha " + std::to_string(i) + ")");
             }
         }
@@ -121,7 +121,7 @@ std::pair<bool, std::string> Forca::eh_valido()
         std::getline(linha, nome, ';');
         if (nome.size() == 0)
         {
-            return std::pair<bool, std::string>(false, "Campo Nome vazio no arquivo de scores (linha " +
+            return std::pair<bool, std::string>(false, "Campo Nome vazio no arquivo de scores (linha :" +
                                                            std::to_string(i) + ")");
         }
 
@@ -132,7 +132,7 @@ std::pair<bool, std::string> Forca::eh_valido()
         std::getline(linha, score_s);
         if (nome.size() == 0)
         {
-            return std::pair<bool, std::string>(false, "Campo Score vazio no arquivo de scores (linha " +
+            return std::pair<bool, std::string>(false, "Campo Score vazio no arquivo de scores (linha :" +
                                                            std::to_string(i) + ")");
         }
 

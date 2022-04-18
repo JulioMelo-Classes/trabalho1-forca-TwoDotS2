@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
     cout << "--------------------------------------------------------------------" << endl;
     if (!valid.first)
     { // sai do programa ao encontrar um erro
-        cout << ">>> Erro " << valid.second << endl;
+        cout << ">>> Erro! " << valid.second << endl;
         cout << "--------------------------------------------------------------------" << endl;
         exit(-1);
     }
