@@ -7,15 +7,22 @@ int main(int argc, char *argv[])
     Forca forca(argv[1], argv[2]);
 
     auto valid = forca.eh_valido();
-
+    cout << ">>> Lendo arquivo de palavras [" << argv[1] << "] e scores [" << argv[2] << "], por favor, aguarde..." << endl;
+    cout << "--------------------------------------------------------------------" << endl;
     if (!valid.first)
     { // sai do programa ao encontrar um erro
-        cout << "Erro " << valid.second << endl;
+        cout << ">>> Erro " << valid.second << endl;
+        cout << "--------------------------------------------------------------------" << endl;
         exit(-1);
     }
-
+    else
+    {
+        cout << ">>> Arquivos OK! " << endl;
+        cout << "--------------------------------------------------------------------" << endl;
+    }
+  
     forca.carregar_arquivos();
-
+    
     /**
      * Como os arquivos são válidos, calcula a frequência média de palavras no 'Arquivo de Palavras'
      */
