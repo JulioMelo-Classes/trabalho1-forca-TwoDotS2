@@ -203,8 +203,8 @@ public:
     std::vector<std::string> 
     filtrar_palavras_por_dificuldade( Dificuldade dificuldade, std::vector<std::pair<std::string, int>> palavras, int frequencia_media );
 
-    void inserir_filtradas_facil(std::vector<std::pair<std::string, int>> palavras, std::vector<std::string> &dest, int frequencia_media, int qtd_filtradas);
-    void inserir_filtradas_medio(std::vector<std::pair<std::string, int>> palavras, std::vector<std::string> &dest, int frequencia_media, int qtd_filtradas);
-    void inserir_filtradas_dificil(std::vector<std::pair<std::string, int>> palavras, std::vector<std::string> &dest, int frequencia_media, int qtd_filtradas);
+    void inserir_filtradas_facil(int);
+    void inserir_filtradas_medio(int);
+    void inserir_filtradas_dificil(int);
   
 };
