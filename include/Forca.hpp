@@ -47,12 +47,15 @@ public:
     /////////////////////////////////////////////////////////////////////////
     /////////// Menus
     //////////////////////////////////////////////
+
     /**
      * Printa o menu de informações do jogo da forca.
      * (Opções 'Inicar Jogo', 'Ver scores anteriores' e 'Sair do jogo')
      */
 
-    void print_menu_informacoes();
+    void menu_handler();
+
+    int print_menu_informacoes();
 
     /**
      * Printa os scores registrados em ./save/scores.txt
@@ -65,7 +68,7 @@ public:
      * (Dificuldades: 'Fácil', 'Médio' e 'Difícil)
      */
 
-    void print_menu_dificuldades();
+    int print_menu_dificuldades();
 
     /**
      * Printa a user interface da forca baseada em m_palavra_jogada e m_palavra_atual
@@ -177,8 +180,6 @@ public:
     /////////// Sorteio
     //////////////////////////////////////////////
 
-    void set_frequencia_media();
-
     /**
      * Uma vez que a lista de palavras já foi validada, é necessário fazer a
      * o cálculo da média para o sorteio da palavra.
@@ -186,7 +187,7 @@ public:
      * @return int
      */
 
-    int calcular_frequencia_media();
+    void calcular_frequencia_media();
 
     /**
      * Define as palavras do jogo atual
@@ -200,11 +201,14 @@ public:
      * @param frequencia_media a frequêcia média das palavras utilizadas no arquivo base
      * @return std::vector<std::string> 
      */
-    std::vector<std::string> 
-    filtrar_palavras_por_dificuldade( Dificuldade dificuldade, std::vector<std::pair<std::string, int>> palavras, int frequencia_media );
 
-    void inserir_filtradas_facil(int);
-    void inserir_filtradas_medio(int);
-    void inserir_filtradas_dificil(int);
-  
+    void filtrar_palavras_por_dificuldade( Dificuldade dificuldade, int frequencia_media );
+
+    void print_filtradas();
+
+    private:
+        void inserir_filtradas_facil(int qtd_filtradas);
+        void inserir_filtradas_medio(int qtd_filtradas);
+        void inserir_filtradas_dificil(int qtd_filtradas);
+        // int myrandom (int i);
 };
