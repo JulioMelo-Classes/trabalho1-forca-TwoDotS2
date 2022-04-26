@@ -24,9 +24,10 @@ int main(int argc, char *argv[])
   
     forca.carregar_arquivos();
     
+    /*
     while ( true )
     {
-        /*imprime o menu principal e a escolha do usuário*/
+        //imprime o menu principal e a escolha do usuário
         op_principal = forca.print_menu_informacoes();
         
         if (op_principal == 1)
@@ -34,15 +35,15 @@ int main(int argc, char *argv[])
             Forca::Dificuldade d = forca.print_menu_dificuldades();
             forca.set_dificuldade(d);
 
-            /*Sorteia as palavras*/
+            //Sorteia as palavras
             forca.sortear_palavras();
 
             while ( true )
             {
-                /*define a palavra da rodada atual e a sua forma em underscores*/
+                //define a palavra da rodada atual e a sua forma em underscores
                 forca.proxima_palavra();
 
-                /*exibe interface do jogo*/
+                //exibe interface do jogo
                 forca.dica_palavra_jogada(); 
                 string palpite = forca.print_forca_ui();
                 
@@ -66,12 +67,12 @@ int main(int argc, char *argv[])
                         
                 }
                 else
-                { /*perdeu*/
+                { //perdeu
                     forca.print_game_over();
                     break;
                 }
             }
-            /*ler informações do jogador para o score e gravar no arquivo*/
+            //ler informações do jogador para o score e gravar no arquivo
         }
         
         else if (op_principal == 2)
@@ -79,5 +80,6 @@ int main(int argc, char *argv[])
 
         else break;
     }
+    */
     return 0;
 }
