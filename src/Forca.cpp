@@ -51,9 +51,9 @@ std::pair<bool, std::string> Forca::eh_valido()
     // Contador de linhas do arquivo
     int i = 1;
 
-    while (fin >> palavra >> frequencia_string)
+    while (fin >> palavra)
     {
-        // Se a palavra não estiver entre [A-Z], ou não for ' ' ou
+        // Se os caracteres da palavra não estiverem entre [A-Z], ou não forem ' ' ou
         // '-'. é enviada uma mensagem de erro
         for (char &ch : palavra)
         {
@@ -64,19 +64,9 @@ std::pair<bool, std::string> Forca::eh_valido()
                                                                " (linha " + std::to_string(i) + ")");
             }
         }
-        // Para cada caractere da frequencia, se ela não estiver entre [0-9], é enviada uma mensagem de erro
-        for (char &ch : frequencia_string)
-        {
-            if (ch < '0' || ch > '9')
-            {
-                fin.close();
-                return std::pair<bool, std::string>(false, "Frequência não é um número inteiro positivo na palavra :" +
-                                                               palavra + " (linha " + std::to_string(i) + ")");
-            }
-        }
-
+       
         // Utilizando stoi() para transformar uma string em um inteiro
-        int frequencia = stoi(frequencia_string);
+        // int frequencia = stoi(frequencia_string);
 
         // Se a palavra tem 4 ou menos caracteres é enviada uma mensagem de erro
         if (palavra.size() <= 4)
@@ -85,6 +75,23 @@ std::pair<bool, std::string> Forca::eh_valido()
             return std::pair<bool, std::string>(false, "Palavra com tamanho menor ou igual a 4: " + palavra +
                                                            " (linha " + std::to_string(i) + ")");
         }
+        if(fin >> frequencia_string){
+          // Para cada caractere da frequencia, se ela não estiver entre [0-9], é enviada uma mensagem de erro
+        for (char &ch : frequencia_string)
+        {
+          if (ch < '0' || ch > '9')
+          {
+            fin.close();
+                return std::pair<bool, std::string>(false, "Frequência não é um número inteiro positivo na palavra: " +
+                                                               palavra + " (linha " + std::to_string(i) + ")");
+            }
+        }
+        } else {
+          fin.close();
+                return std::pair<bool, std::string>(false, "Não existe frequência referente à palavra: " +
+                                                               palavra + " (linha " + std::to_string(i) + ")");
+        }
+       
 
         // Passando para próxima linha
         i++;
@@ -107,7 +114,9 @@ std::pair<bool, std::string> Forca::eh_valido()
     std::string line;
     while (std::getline(fin, line))
     {
+        //contador de ponto e virgula
         int semis = 0;
+        //char
         for (auto &ch : line)
         {
             if (ch == ';')
@@ -136,7 +145,7 @@ std::pair<bool, std::string> Forca::eh_valido()
         std::getline(linha, nome, ';');
         if (nome.size() == 0)
         {
-            return std::pair<bool, std::string>(false, "Campo Nome vazio no arquivo de scores (linha :" +
+            return std::pair<bool, std::string>(false, "Campo Nome vazio no arquivo de scores (linha " +
                                                            std::to_string(i) + ")");
         }
 
@@ -145,9 +154,10 @@ std::pair<bool, std::string> Forca::eh_valido()
 
         std::string score_s;
         std::getline(linha, score_s);
-        if (nome.size() == 0)
+      //ALTERAR SCORE
+        if (score_s.size() == 0)
         {
-            return std::pair<bool, std::string>(false, "Campo Score vazio no arquivo de scores (linha :" +
+            return std::pair<bool, std::string>(false, "Campo Score vazio no arquivo de scores (linha " +
                                                            std::to_string(i) + ")");
         }
 
@@ -174,12 +184,176 @@ std::pair<bool, std::string> Forca::eh_valido()
     return std::pair<bool, std::string>(true, "");
 }
 
+//Imprimindo os scores formatados
+void Forca::print_scores_registrados()
+{
+    struct Score
+    {
+        std::string nivel;
+        std::string nome;
+        std::vector<std::string> palavras;
+        int score;
+    };
+
+    std::vector<Score> scores;
+
+    std::string stringNivel = "Dificuldade";
+    std::string stringNome = "Jogador";
+    std::string stringPalavras = "Palavras";
+    std::string stringPontos = "Pontos";
+
+    int tamNivel = stringNivel.size();
+    int tamNome = stringNome.size();
+    int tamPalavras = stringPalavras.size();
+    int tamPontos = stringPontos.size();
+
+    std::ifstream fin;
+    fin.open(m_arquivo_scores);
+
+    std::string line;
+    while (std::getline(fin, line))
+    {
+        std::istringstream linha(line);
+
+        std::string nivel;
+        std::getline(linha, nivel, ';');
+
+        std::string nome;
+        std::getline(linha, nome, ';');
+
+        std::string palavras_acertadas;
+        std::getline(linha, palavras_acertadas, ';');
+
+        std::vector<std::string> palavras_separadas;
+
+        std::istringstream palavras(palavras_acertadas);
+        std::string palavra;
+        while (std::getline(palavras, palavra, ','))
+        {
+            palavras_separadas.push_back(palavra);
+            tamPalavras = std::max(tamPalavras, (int)palavra.size());
+        }
+
+        std::string score_s;
+        std::getline(linha, score_s);
+        int score = stoi(score_s);
+
+        scores.push_back(Score{nivel, nome, palavras_separadas, score});
+
+        tamNivel = std::max(tamNivel, (int)nivel.size());
+        tamNome = std::max(tamNome, (int)nome.size());
+        tamPontos = std::max(tamPontos, (int)score_s.size());
+    }
+
+    std::cout << std::left;
+    std::cout.width(tamNivel + 1);
+    std::cout << stringNivel + " ";
+    std::cout << "|";
+    std::cout << std::left;
+    std::cout.width(tamNome + 2);
+    std::cout << " " + stringNome + " ";
+    std::cout << "|";
+    std::cout << std::left;
+    std::cout.width(tamPalavras + 2);
+    std::cout << " " + stringPalavras + " ";
+    std::cout << "|";
+    std::cout << std::left;
+    std::cout.width(tamPontos + 1);
+    std::cout << " " + stringPontos;
+    std::cout << std::endl;
+
+    for (auto &score : scores)
+    {
+        if (score.palavras.size() == 0)
+        {
+            std::cout << std::left;
+            std::cout.width(tamNivel + 1);
+            std::cout << score.nivel + " ";
+            std::cout << "|";
+            std::cout << std::left;
+            std::cout.width(tamNome + 2);
+            std::cout << " " + score.nome + " ";
+            std::cout << "|";
+            std::cout << std::left;
+            std::cout.width(tamPalavras + 2);
+            std::cout << " <nenhuma> ";
+            std::cout << "|";
+            std::cout << std::left;
+            std::cout.width(tamPontos + 1);
+            std::cout << " " + std::to_string(score.score);
+            std::cout << std::endl;
+        }
+        else
+        {
+            std::cout << std::left;
+            std::cout.width(tamNivel + 1);
+            std::cout << score.nivel + " ";
+            std::cout << "|";
+            std::cout << std::left;
+            std::cout.width(tamNome + 2);
+            std::cout << " " + score.nome + " ";
+            std::cout << "|";
+            std::cout << std::left;
+            std::cout.width(tamPalavras + 2);
+            std::cout << " " + score.palavras[0] + " ";
+            std::cout << "|";
+            std::cout << std::left;
+            std::cout.width(tamPontos + 1);
+            std::cout << " " + std::to_string(score.score);
+            std::cout << std::endl;
+
+            for (int i = 1; i < score.palavras.size(); i++)
+            {
+                std::cout << std::left;
+                std::cout.width(tamNivel + 1);
+                std::cout << " ";
+                std::cout << "|";
+                std::cout << std::left;
+                std::cout.width(tamNome + 2);
+                std::cout << " ";
+                std::cout << "|";
+                std::cout << std::left;
+                std::cout.width(tamPalavras + 2);
+                std::cout << " " + score.palavras[i] + " ";
+                std::cout << "|";
+                std::cout << std::left;
+                std::cout.width(tamPontos + 1);
+                std::cout << " ";
+                std::cout << std::endl;
+            }
+        }
+
+        for (int i = 0; i < tamNivel + 1; i++)
+        {
+            std::cout << "-";
+        }
+        std::cout << "+";
+        for (int i = 0; i < tamNome + 2; i++)
+        {
+            std::cout << "-";
+        }
+        std::cout << "+";
+        for (int i = 0; i < tamPalavras + 2; i++)
+        {
+            std::cout << "-";
+        }
+        std::cout << "+";
+        for (int i = 0; i < tamPontos + 1; i++)
+        {
+            std::cout << "-";
+        }
+        std::cout << std::endl;
+    }
+
+    fin.close();
+}
+
 void Forca::carregar_arquivos()
 {
     std::ifstream fin;
     fin.open(m_arquivo_palavras);
 
-    std::string line;
+    // std::string line;
     std::string palavra;
     int frequencia;
 
