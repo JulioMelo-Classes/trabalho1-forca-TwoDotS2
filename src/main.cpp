@@ -22,12 +22,7 @@ int main(int argc, char *argv[])
     }
   
     forca.carregar_arquivos();
-    
-    /**
-     * Como os arquivos são válidos, calcula a frequência média de palavras no 'Arquivo de Palavras'
-     */
-    
-    forca.set_frequencia_media();
+    forca.sortear_palavras();
     
     // while (true)
     // {

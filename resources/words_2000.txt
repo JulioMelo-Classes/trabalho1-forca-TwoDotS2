@@ -467,6 +467,7 @@ volta	116886
 imagem	116831
 quantidade	116690
 gestao	116372
+gestao	116372
 praticas	115986
 obras	115931
 conceito	115901
@@ -1400,6 +1401,7 @@ SILVA	49980
 intencao	49958
 novamente	49941
 transmissao	49846
+Dessa	49839
 Dessa	49839
 atuais	49833
 paulista	49698

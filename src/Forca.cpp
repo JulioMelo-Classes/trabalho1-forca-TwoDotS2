@@ -12,6 +12,10 @@
 #include <ctype.h>
 
 
+//Bibliotecas para o sorteio
+#include <ctime>        // std::time
+#include <cstdlib>      // std::rand, std::srand
+
 // Construtor
 // O valor das strings serão os caminhos para chegar no arquivo
 Forca::Forca(std::string __palavras, std::string __scores)
@@ -193,17 +197,10 @@ void Forca::carregar_arquivos()
     }
 
     fin.close();
+
+    calcular_frequencia_media();
 }
 
-void Forca::set_frequencia_media()
-{
-    m_frequencia_media = calcular_frequencia_media();
-}
-
-void Forca::sortear_palavras()
-{
-     m_palavras_do_jogo = filtrar_palavras_por_dificuldade(m_dificuldade, m_palavras, m_frequencia_media);
-}
 /**
  * Calcula através de média aritimética a média de frequência das
  * palavras do banco
@@ -212,7 +209,7 @@ void Forca::sortear_palavras()
  * @return int
  */
 
-int Forca::calcular_frequencia_media()
+void Forca::calcular_frequencia_media()
 {
     int frequencia = 0;
     int media = 0;
@@ -220,45 +217,48 @@ int Forca::calcular_frequencia_media()
     for (int i = 0; i < (int)m_palavras.size(); i++)
     {
         frequencia += m_palavras[i].second; //<! O valor da frequência da palavra[i] fica
-                                          // armazenado na segunda parte do std::pair
+                                            // armazenado na segunda parte do std::pair
     }
 
     media = frequencia / ((int)m_palavras.size()); //<! Média aritimética de inteiros, já que, nesse
-                                                 // caso, não existe frequência com ponto flutuante
-
-    std::cout << "media: " << media << std::endl;
-    return frequencia;
+                                                   // caso, não existe frequência com ponto flutuante
+                                                   
+    m_frequencia_media = media;
 }
 
-std::vector<std::string> Forca::filtrar_palavras_por_dificuldade(Forca::Dificuldade dificuldade, std::vector<std::pair<std::string, int>> palavras, int frequencia_media)
+int myrandom (int i) { return std::rand() % i; }
+
+void Forca::sortear_palavras()
 {
-    std::vector<std::string> filtradas; //<! Vetor que vai receber as palavras diferentes, tratadas
-    // baseadas na dificuldade
-    int qtd_filtradas; //<! Armazenar o total de palavras a serem filtradas e
+    int qtd_filtradas; //<! Armazenar o total de palavras a serem filtradas
 
     // Aleatoriedade de 2.2, itens a,b,c, subitem i.
     //   'Insira na base Palavras do Jogo N palavras aleatórias'
-    // http://www.cplusplus.com/reference/algorithm/random_shuffle/
-    std::random_shuffle(palavras.begin(), palavras.end());
+    
+    
+    //Faz o sorteio linear (aleatoriedade somente por execução com main ativo)
+    //std::random_shuffle(m_palavras.begin(), m_palavras.end());
+
+    std::srand ( unsigned ( std::time(0) ) );
+    std::random_shuffle(m_palavras.begin(), m_palavras.end(), myrandom);
+    // Estudar: http://www.cplusplus.com/reference/algorithm/random_shuffle/
 
     //<! divisão dos filtros por dificuldade
-    if (dificuldade == Forca::FACIL)
+    if (m_dificuldade == Forca::FACIL)
     {
         qtd_filtradas = 10;
         inserir_filtradas_facil(qtd_filtradas);
     }
-    else if (dificuldade == Forca::MEDIO)
+    else if (m_dificuldade == Forca::MEDIO)
     {
         qtd_filtradas = 20;
         inserir_filtradas_medio(qtd_filtradas);
     }
-    else if (dificuldade == Forca::DIFICIL)
+    else if (m_dificuldade == Forca::DIFICIL)
     {
         qtd_filtradas = 30;
         inserir_filtradas_dificil(qtd_filtradas);
     }
-
-    return filtradas;
 }
 
 /**
@@ -271,14 +271,23 @@ std::vector<std::string> Forca::filtrar_palavras_por_dificuldade(Forca::Dificuld
  */
 void Forca::inserir_filtradas_facil(int qtd_filtradas)
 {
+    std::vector<std::string>::iterator it;
     for (int i = 0; i < (int)m_palavras.size(); i++)
     {
         // Insira na base 10 palavras aleatórias diferentes cuja frequência seja maior
         // do que a frequência média.
         if (m_palavras[i].second > m_frequencia_media)
         {
-            if (std::find(m_palavras_do_jogo.begin(), m_palavras_do_jogo.end(), m_palavras[i].first) != m_palavras_do_jogo.end())
+            it = std::find(m_palavras_do_jogo.begin(), m_palavras_do_jogo.end(), m_palavras[i].first);
+
+
+           /** Pesquisar: it - m_palavras_do_jogo.begin() > 0
+            *  https://www.geeksforgeeks.org/std-find-in-cpp/
+            */ 
+            if ((int)m_palavras_do_jogo.size() == 0 || it - m_palavras_do_jogo.begin() > 0)
+            {
                 m_palavras_do_jogo.push_back(m_palavras[i].first);
+            }
         }
 
         if ((int)m_palavras_do_jogo.size() == qtd_filtradas)
@@ -288,58 +297,70 @@ void Forca::inserir_filtradas_facil(int qtd_filtradas)
 
 void Forca::inserir_filtradas_medio(int qtd_filtradas)
 {
-    //For para percorrer a base
+    std::vector<std::string>::iterator it;
+    // For para percorrer a base
     for (int i = 0; i < (int)m_palavras.size(); i++)
     {
+        it = std::find(m_palavras_do_jogo.begin(), m_palavras_do_jogo.end(), m_palavras[i].first);
+
         // 2.2 b) ii. '1/3 dessas palavras deve ser de palavras com frequência menor do que a média'
         // Buscando de palavra em palavra da base, verifica se as palavras do jogo atual já são 1/3 (6)
         // do total e aplica a condição de ser menor do que a média
-        if ((int)m_palavras_do_jogo.size() <= (int)(qtd_filtradas * (1 / 3)))
+        if ((int)m_palavras_do_jogo.size() != (int)(qtd_filtradas / 3))
         {
             if (m_palavras[i].second < m_frequencia_media)
             {
                 //<! Caso std::find retorne o iterador do fim, significa que não há ocorrência.
                 //<! Caso contrário, a palavra já existe entre as palavras do jogo
-                if (std::find(m_palavras_do_jogo.begin(), m_palavras_do_jogo.end(), m_palavras[i].first) != m_palavras_do_jogo.end())
+                if ((int)m_palavras_do_jogo.size() == 0 || it - m_palavras_do_jogo.begin() > 0)
+                {
                     m_palavras_do_jogo.push_back(m_palavras[i].first);
+                }
             }
         }
         else
             break;
-        //Assim que 1/3 das palavras do jogo já tem frequência menor que a média, sai do laço
-        //e preenche com a condição de ser maior que a frequência média
+        // Assim que 1/3 das palavras do jogo já tem frequência menor que a média, sai do laço
+        // e preenche com a condição de ser maior que a frequência média
     }
 
-    //For para percorrer a base desde o ínico, já que existe a possibilidade da condição acima só ocorrer
-    //no fim da base 
-    for (int i = 0; i < (int) m_palavras.size(); i++)
+    // For para percorrer a base desde o ínico, já que existe a possibilidade da condição acima só ocorrer
+    // no fim da base
+    for (int i = 0; i < (int)m_palavras.size(); i++)
     {
+        it = std::find(m_palavras_do_jogo.begin(), m_palavras_do_jogo.end(), m_palavras[i].first);
         if (m_palavras[i].second > m_frequencia_media)
         {
             //<! Caso std::find retorne o iterador do fim, significa que não há ocorrência.
             //<! Caso contrário, a palavra já existe entre as palavras do jogo
-            if (std::find(m_palavras_do_jogo.begin(), m_palavras_do_jogo.end(), m_palavras[i].first) != m_palavras_do_jogo.end())
+            if ((int)m_palavras_do_jogo.size() == 0 || it - m_palavras_do_jogo.begin() > 0)
+            {
                 m_palavras_do_jogo.push_back(m_palavras[i].first);
+            }
         }
 
-        if ((int) m_palavras_do_jogo.size() == qtd_filtradas)
+        if ((int)m_palavras_do_jogo.size() == qtd_filtradas)
             break;
     }
 }
 
 void Forca::inserir_filtradas_dificil(int qtd_filtradas)
 {
+    std::vector<std::string>::iterator it;
     for (int i = 0; i < (int)m_palavras.size(); i++)
     {
+        it = std::find(m_palavras_do_jogo.begin(), m_palavras_do_jogo.end(), m_palavras[i].first);
         // 2.2 c) ii. '3/4 dessas palavras deve ser de palavras com frequência menor do que a média'
         // Buscando de palavra em palavra da base, verifica se as palavras do jogo atual já são 3/4 (22)
         // do total e aplica a condição de ser menor do que a média
-        if ((int)m_palavras_do_jogo.size() <= (int)(qtd_filtradas * (3 / 4)))
+        if ((int)m_palavras_do_jogo.size() <= (int)(qtd_filtradas * 3 / 4))
         {
             if (m_palavras[i].second < m_frequencia_media)
             {
-                if (std::find(m_palavras_do_jogo.begin(), m_palavras_do_jogo.end(), m_palavras[i].first) != m_palavras_do_jogo.end())
+                if ((int)m_palavras_do_jogo.size() == 0 || it - m_palavras_do_jogo.begin() > 0)
+                {
                     m_palavras_do_jogo.push_back(m_palavras[i].first);
+                }
             }
         }
         else
@@ -348,14 +369,80 @@ void Forca::inserir_filtradas_dificil(int qtd_filtradas)
 
     for (int i = 0; i < (int)m_palavras.size(); i++)
     {
+        it = std::find(m_palavras_do_jogo.begin(), m_palavras_do_jogo.end(), m_palavras[i].first);
         if (m_palavras[i].second > m_frequencia_media)
         {
             //<! Caso std::find retorne o iterador do fim, significa que não há ocorrência
-            if (std::find(m_palavras_do_jogo.begin(), m_palavras_do_jogo.end(), m_palavras[i].first) != m_palavras_do_jogo.end())
+            if (((int)m_palavras_do_jogo.size() == 0 || it - m_palavras_do_jogo.begin() > 0) && (int)m_palavras_do_jogo.size() != qtd_filtradas)
+            {
                 m_palavras_do_jogo.push_back(m_palavras[i].first);
+            }
+            else if ((int)m_palavras_do_jogo.size() == qtd_filtradas)
+                break;
         }
-
-        if ((int) m_palavras_do_jogo.size() == qtd_filtradas)
-            break;
     }
+}
+
+/////////////////////////////////////////////////////////////////////////
+/////////// Menus
+//////////////////////////////////////////////
+
+/* void Forca::menu_handler(int opcao){
+    std::string ultimo_menu, atual_menu = "info";
+    if(atual_menu == "info"){
+        switch(print_menu_informacoes()){
+            case 1: int i = print_menu_dificuldades();
+                    break;
+
+            case 2: print_scores_registrados();
+                    break;
+
+            case 3: break;
+        }
+    }
+
+}
+*/
+
+int Forca::print_menu_informacoes()
+{
+    int escolha = 0;
+    std::cout << "Bem vindo ao Jogo Forca! Por favor escolha uma das opções" << std::endl;
+    std::cout << "1 - Iniciar Jogo" << std::endl;
+    std::cout << "2 - Ver scores anteriores" << std::endl;
+    std::cout << "3 - Sair do Jogo" << std::endl;
+    std::cout << "Sua escolha: "; 
+    std:: cin >> escolha;
+    return escolha;
+}
+
+int Forca::print_menu_dificuldades()
+{
+    int escolha = 0;
+    std::cout << "Vamos iniciar o jogo! Por favor escolha o nível de dificuldade" << std::endl;
+    std::cout << "1 - Fácil" << std::endl;
+    std::cout << "2 - Médio" << std::endl;
+    std::cout << "3 - Difícil" << std::endl;
+    std::cout << "Sua escolha: "; 
+    std:: cin >> escolha;
+    return escolha;
+
+
+}
+
+void Forca::print_scores_registrados()
+{
+
+}
+
+void Forca::print_forca_ui()
+{
+    std::cout << "Iniciando o Jogo no nível Médio, será que você conhece essa palavra?" << std::endl;
+    //
+}
+
+void Forca::print_filtradas()
+{
+    for (int i = 0; i < (int)m_palavras_do_jogo.size(); i++)
+        std::cout << i << ": " << m_palavras_do_jogo[i] << std::endl;
 }
