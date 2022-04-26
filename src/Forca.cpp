@@ -64,7 +64,7 @@ std::pair<bool, std::string> Forca::eh_valido()
                                                                " (linha " + std::to_string(i) + ")");
             }
         }
-       
+
         // Utilizando stoi() para transformar uma string em um inteiro
         // int frequencia = stoi(frequencia_string);
 
@@ -75,23 +75,25 @@ std::pair<bool, std::string> Forca::eh_valido()
             return std::pair<bool, std::string>(false, "Palavra com tamanho menor ou igual a 4: " + palavra +
                                                            " (linha " + std::to_string(i) + ")");
         }
-        if(fin >> frequencia_string){
-          // Para cada caractere da frequencia, se ela não estiver entre [0-9], é enviada uma mensagem de erro
-        for (char &ch : frequencia_string)
+        if (fin >> frequencia_string)
         {
-          if (ch < '0' || ch > '9')
-          {
-            fin.close();
-                return std::pair<bool, std::string>(false, "Frequência não é um número inteiro positivo na palavra: " +
-                                                               palavra + " (linha " + std::to_string(i) + ")");
+            // Para cada caractere da frequencia, se ela não estiver entre [0-9], é enviada uma mensagem de erro
+            for (char &ch : frequencia_string)
+            {
+                if (ch < '0' || ch > '9')
+                {
+                    fin.close();
+                    return std::pair<bool, std::string>(false, "Frequência não é um número inteiro positivo na palavra: " +
+                                                                   palavra + " (linha " + std::to_string(i) + ")");
+                }
             }
         }
-        } else {
-          fin.close();
-                return std::pair<bool, std::string>(false, "Não existe frequência referente à palavra: " +
-                                                               palavra + " (linha " + std::to_string(i) + ")");
+        else
+        {
+            fin.close();
+            return std::pair<bool, std::string>(false, "Não existe frequência referente à palavra: " +
+                                                           palavra + " (linha " + std::to_string(i) + ")");
         }
-       
 
         // Passando para próxima linha
         i++;
@@ -114,9 +116,9 @@ std::pair<bool, std::string> Forca::eh_valido()
     std::string line;
     while (std::getline(fin, line))
     {
-        //contador de ponto e virgula
+        // contador de ponto e virgula
         int semis = 0;
-        //char
+        // char
         for (auto &ch : line)
         {
             if (ch == ';')
@@ -154,7 +156,7 @@ std::pair<bool, std::string> Forca::eh_valido()
 
         std::string score_s;
         std::getline(linha, score_s);
-      //ALTERAR SCORE
+        // ALTERAR SCORE
         if (score_s.size() == 0)
         {
             return std::pair<bool, std::string>(false, "Campo Score vazio no arquivo de scores (linha " +
@@ -184,7 +186,7 @@ std::pair<bool, std::string> Forca::eh_valido()
     return std::pair<bool, std::string>(true, "");
 }
 
-//Imprimindo os scores formatados
+// Imprimindo os scores formatados
 void Forca::print_scores_registrados()
 {
     struct Score
@@ -597,10 +599,6 @@ Forca::Dificuldade Forca::print_menu_dificuldades()
     return d;
 }
 
-void Forca::print_scores_registrados()
-{
-}
-
 void Forca::proxima_palavra()
 {
     std::vector<std::string> dificuldades = {"Fácil", "Médio", "Difícil"};
@@ -782,7 +780,8 @@ std::string Forca::print_forca_ui(std::pair<bool, bool> palpite, std::string ult
 }
 
 //[NÃO FINALIZADO]
-void atualizar_tentativas( std::pair<bool, bool> tipo_palpite ){
+void Forca::atualizar_tentativas(std::pair<bool, bool> tipo_palpite)
+{
     // {T,T} se o palpite pertence à palavra e é um palpite novo,
     if (tipo_palpite.first && tipo_palpite.second)
     {
@@ -833,9 +832,9 @@ bool Forca::print_continuar_jogando()
     std::string op;
     bool b = true;
 
-    std::cout << "Você acertou! Parabéns! A palavra era " << m_palavra_atual << "!" << std::endl 
-        << std::endl;
-              
+    std::cout << "Você acertou! Parabéns! A palavra era " << m_palavra_atual << "!" << std::endl
+              << std::endl;
+
     while (b)
     {
         std::cout << "Deseja continuar jogando [S/N]: ";
@@ -855,7 +854,7 @@ bool Forca::print_continuar_jogando()
 //[NÃO FINALIZADO]
 bool Forca::rodada_terminada()
 {
-    //Esse método precisa chamar saber o tipo do último palpite
+    // Esse método precisa chamar saber o tipo do último palpite
     m_tentativas_restantes;
     return true;
 }
@@ -874,4 +873,8 @@ std::string Forca::get_palavra_jogada()
 std::string Forca::get_palavra_atual()
 {
     return m_palavra_atual;
+}
+
+void Forca::reset_rodada()
+{
 }
