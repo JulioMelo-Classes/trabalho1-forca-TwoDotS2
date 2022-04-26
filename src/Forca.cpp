@@ -8,8 +8,6 @@
 #include <string>
 #include <vector>
 #include <sstream>
-#include <cstring>
-#include <ctype.h>
 
 
 //Bibliotecas para o sorteio
@@ -175,6 +173,170 @@ std::pair<bool, std::string> Forca::eh_valido()
     fin.close();
 
     return std::pair<bool, std::string>(true, "");
+}
+
+//Imprimindo os scores formatados
+void Forca::print_scores_registrados()
+{
+    struct Score
+    {
+        std::string nivel;
+        std::string nome;
+        std::vector<std::string> palavras;
+        int score;
+    };
+
+    std::vector<Score> scores;
+
+    std::string stringNivel = "Dificuldade";
+    std::string stringNome = "Jogador";
+    std::string stringPalavras = "Palavras";
+    std::string stringPontos = "Pontos";
+
+    int tamNivel = stringNivel.size();
+    int tamNome = stringNome.size();
+    int tamPalavras = stringPalavras.size();
+    int tamPontos = stringPontos.size();
+
+    std::ifstream fin;
+    fin.open(m_arquivo_scores);
+
+    std::string line;
+    while (std::getline(fin, line))
+    {
+        std::istringstream linha(line);
+
+        std::string nivel;
+        std::getline(linha, nivel, ';');
+
+        std::string nome;
+        std::getline(linha, nome, ';');
+
+        std::string palavras_acertadas;
+        std::getline(linha, palavras_acertadas, ';');
+
+        std::vector<std::string> palavras_separadas;
+
+        std::istringstream palavras(palavras_acertadas);
+        std::string palavra;
+        while (std::getline(palavras, palavra, ','))
+        {
+            palavras_separadas.push_back(palavra);
+            tamPalavras = std::max(tamPalavras, (int)palavra.size());
+        }
+
+        std::string score_s;
+        std::getline(linha, score_s);
+        int score = stoi(score_s);
+
+        scores.push_back(Score{nivel, nome, palavras_separadas, score});
+
+        tamNivel = std::max(tamNivel, (int)nivel.size());
+        tamNome = std::max(tamNome, (int)nome.size());
+        tamPontos = std::max(tamPontos, (int)score_s.size());
+    }
+
+    std::cout << std::left;
+    std::cout.width(tamNivel + 1);
+    std::cout << stringNivel + " ";
+    std::cout << "|";
+    std::cout << std::left;
+    std::cout.width(tamNome + 2);
+    std::cout << " " + stringNome + " ";
+    std::cout << "|";
+    std::cout << std::left;
+    std::cout.width(tamPalavras + 2);
+    std::cout << " " + stringPalavras + " ";
+    std::cout << "|";
+    std::cout << std::left;
+    std::cout.width(tamPontos + 1);
+    std::cout << " " + stringPontos;
+    std::cout << std::endl;
+
+    for (auto &score : scores)
+    {
+        if (score.palavras.size() == 0)
+        {
+            std::cout << std::left;
+            std::cout.width(tamNivel + 1);
+            std::cout << score.nivel + " ";
+            std::cout << "|";
+            std::cout << std::left;
+            std::cout.width(tamNome + 2);
+            std::cout << " " + score.nome + " ";
+            std::cout << "|";
+            std::cout << std::left;
+            std::cout.width(tamPalavras + 2);
+            std::cout << " <nenhuma> ";
+            std::cout << "|";
+            std::cout << std::left;
+            std::cout.width(tamPontos + 1);
+            std::cout << " " + std::to_string(score.score);
+            std::cout << std::endl;
+        }
+        else
+        {
+            std::cout << std::left;
+            std::cout.width(tamNivel + 1);
+            std::cout << score.nivel + " ";
+            std::cout << "|";
+            std::cout << std::left;
+            std::cout.width(tamNome + 2);
+            std::cout << " " + score.nome + " ";
+            std::cout << "|";
+            std::cout << std::left;
+            std::cout.width(tamPalavras + 2);
+            std::cout << " " + score.palavras[0] + " ";
+            std::cout << "|";
+            std::cout << std::left;
+            std::cout.width(tamPontos + 1);
+            std::cout << " " + std::to_string(score.score);
+            std::cout << std::endl;
+
+            for (int i = 1; i < score.palavras.size(); i++)
+            {
+                std::cout << std::left;
+                std::cout.width(tamNivel + 1);
+                std::cout << " ";
+                std::cout << "|";
+                std::cout << std::left;
+                std::cout.width(tamNome + 2);
+                std::cout << " ";
+                std::cout << "|";
+                std::cout << std::left;
+                std::cout.width(tamPalavras + 2);
+                std::cout << " " + score.palavras[i] + " ";
+                std::cout << "|";
+                std::cout << std::left;
+                std::cout.width(tamPontos + 1);
+                std::cout << " ";
+                std::cout << std::endl;
+            }
+        }
+
+        for (int i = 0; i < tamNivel + 1; i++)
+        {
+            std::cout << "-";
+        }
+        std::cout << "+";
+        for (int i = 0; i < tamNome + 2; i++)
+        {
+            std::cout << "-";
+        }
+        std::cout << "+";
+        for (int i = 0; i < tamPalavras + 2; i++)
+        {
+            std::cout << "-";
+        }
+        std::cout << "+";
+        for (int i = 0; i < tamPontos + 1; i++)
+        {
+            std::cout << "-";
+        }
+        std::cout << std::endl;
+    }
+
+    fin.close();
 }
 
 void Forca::carregar_arquivos()
@@ -427,11 +589,6 @@ int Forca::print_menu_dificuldades()
     std:: cin >> escolha;
     return escolha;
 
-
-}
-
-void Forca::print_scores_registrados()
-{
 
 }
 

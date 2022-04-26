@@ -58,7 +58,7 @@ public:
     int print_menu_informacoes();
 
     /**
-     * Printa os scores registrados em ./save/scores.txt
+     * Printa os scores registrados
      */
     void print_scores_registrados();
 

@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
   
     forca.carregar_arquivos();
     forca.sortear_palavras();
-    
+    forca.print_scores_registrados();
     // while (true)
     // {
     //     /*imprime o menu principal e a escolha do usuário*/
