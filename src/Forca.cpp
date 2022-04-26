@@ -2,11 +2,15 @@
 // Bibliotecas para o transform
 #include <algorithm>
 #include <cctype>
+//Ler arquivos
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <vector>
 #include <sstream>
+#include <cstring>
+#include <ctype.h>
+
 
 // Construtor
 // O valor das strings serão os caminhos para chegar no arquivo
@@ -36,9 +40,9 @@ std::pair<bool, std::string> Forca::eh_valido()
     // Contador de linhas do arquivo
     int i = 1;
 
-    while (fin >> palavra >> frequencia_string)
+    while (fin >> palavra)
     {
-        // Se a palavra não estiver entre [A-Z], ou não for ' ' ou
+        // Se os caracteres da palavra não estiverem entre [A-Z], ou não forem ' ' ou
         // '-'. é enviada uma mensagem de erro
         for (char &ch : palavra)
         {
@@ -49,19 +53,9 @@ std::pair<bool, std::string> Forca::eh_valido()
                                                                " (linha " + std::to_string(i) + ")");
             }
         }
-        // Para cada caractere da frequencia, se ela não estiver entre [0-9], é enviada uma mensagem de erro
-        for (char &ch : frequencia_string)
-        {
-            if (ch < '0' || ch > '9')
-            {
-                fin.close();
-                return std::pair<bool, std::string>(false, "Frequência não é um número inteiro positivo na palavra :" +
-                                                               palavra + " (linha " + std::to_string(i) + ")");
-            }
-        }
-
+       
         // Utilizando stoi() para transformar uma string em um inteiro
-        int frequencia = stoi(frequencia_string);
+        // int frequencia = stoi(frequencia_string);
 
         // Se a palavra tem 4 ou menos caracteres é enviada uma mensagem de erro
         if (palavra.size() <= 4)
@@ -70,6 +64,23 @@ std::pair<bool, std::string> Forca::eh_valido()
             return std::pair<bool, std::string>(false, "Palavra com tamanho menor ou igual a 4: " + palavra +
                                                            " (linha " + std::to_string(i) + ")");
         }
+        if(fin >> frequencia_string){
+          // Para cada caractere da frequencia, se ela não estiver entre [0-9], é enviada uma mensagem de erro
+        for (char &ch : frequencia_string)
+        {
+          if (ch < '0' || ch > '9')
+          {
+            fin.close();
+                return std::pair<bool, std::string>(false, "Frequência não é um número inteiro positivo na palavra: " +
+                                                               palavra + " (linha " + std::to_string(i) + ")");
+            }
+        }
+        } else {
+          fin.close();
+                return std::pair<bool, std::string>(false, "Não existe frequência referente à palavra: " +
+                                                               palavra + " (linha " + std::to_string(i) + ")");
+        }
+       
 
         // Passando para próxima linha
         i++;
@@ -92,7 +103,9 @@ std::pair<bool, std::string> Forca::eh_valido()
     std::string line;
     while (std::getline(fin, line))
     {
+        //contador de ponto e virgula
         int semis = 0;
+        //char
         for (auto &ch : line)
         {
             if (ch == ';')
@@ -121,7 +134,7 @@ std::pair<bool, std::string> Forca::eh_valido()
         std::getline(linha, nome, ';');
         if (nome.size() == 0)
         {
-            return std::pair<bool, std::string>(false, "Campo Nome vazio no arquivo de scores (linha :" +
+            return std::pair<bool, std::string>(false, "Campo Nome vazio no arquivo de scores (linha " +
                                                            std::to_string(i) + ")");
         }
 
@@ -130,9 +143,10 @@ std::pair<bool, std::string> Forca::eh_valido()
 
         std::string score_s;
         std::getline(linha, score_s);
-        if (nome.size() == 0)
+      //ALTERAR SCORE
+        if (score_s.size() == 0)
         {
-            return std::pair<bool, std::string>(false, "Campo Score vazio no arquivo de scores (linha :" +
+            return std::pair<bool, std::string>(false, "Campo Score vazio no arquivo de scores (linha " +
                                                            std::to_string(i) + ")");
         }
 
@@ -164,7 +178,7 @@ void Forca::carregar_arquivos()
     std::ifstream fin;
     fin.open(m_arquivo_palavras);
 
-    std::string line;
+    // std::string line;
     std::string palavra;
     int frequencia;
 
