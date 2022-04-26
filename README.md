@@ -82,11 +82,11 @@ Leia o documento de especificação contido em [Especificação do Trabalho 1](h
 
 - Execução:
 
-`./forca ./resources/words_2000.txt ./resources/scoresTest.txt`
+`./forca ./resources/words_2000.txt ./resources/testeScores-erroScores.txt`
 
 - Saída esperada:
 
-`>>> Erro! Nenhum arquivo de scores foi encontrado em: ./resources/scoresTest.txt`
+`>>> Erro! Presença de 4 ';' na linha 1 do arquivo de scores [Esperado: 3]`
 
 **Tentativa de abrir um arquivo de scores com o campo "nível de dificuldade” vazio.**
 
