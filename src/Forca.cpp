@@ -156,7 +156,10 @@ std::pair<bool, std::string> Forca::eh_valido()
 
         std::string score_s;
         std::getline(linha, score_s);
+<<<<<<< HEAD
+=======
         // ALTERAR SCORE
+>>>>>>> 1d4c48e2bcbe0ac3c9f9e5a6b91a81d3b5fce0e3
         if (score_s.size() == 0)
         {
             return std::pair<bool, std::string>(false, "Campo Score vazio no arquivo de scores (linha " +
@@ -247,6 +250,7 @@ void Forca::print_scores_registrados()
         tamPontos = std::max(tamPontos, (int)score_s.size());
     }
 
+    //Cabeçalho
     std::cout << std::left;
     std::cout.width(tamNivel + 1);
     std::cout << stringNivel + " ";
@@ -599,6 +603,13 @@ Forca::Dificuldade Forca::print_menu_dificuldades()
     return d;
 }
 
+<<<<<<< HEAD
+// void Forca::print_scores_registrados()
+// {
+// }
+
+=======
+>>>>>>> 1d4c48e2bcbe0ac3c9f9e5a6b91a81d3b5fce0e3
 void Forca::proxima_palavra()
 {
     std::vector<std::string> dificuldades = {"Fácil", "Médio", "Difícil"};
