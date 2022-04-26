@@ -1,16 +1,4 @@
 #include "../include/Forca.hpp"
-// Bibliotecas para o transform
-#include <algorithm>
-#include <cctype>
-#include <fstream>
-#include <iostream>
-#include <string>
-#include <vector>
-#include <sstream>
-
-//Bibliotecas para o sorteio
-#include <ctime>        // std::time
-#include <cstdlib>      // std::rand, std::srand
 
 // Construtor
 // O valor das strings serão os caminhos para chegar no arquivo
@@ -18,7 +6,30 @@ Forca::Forca(std::string __palavras, std::string __scores)
 {
     m_arquivo_palavras = __palavras;
     m_arquivo_scores = __scores;
-};
+    m_tentativas_restantes = 7;
+    m_pontos = 0;
+}
+
+void Forca::set_dificuldade(Forca::Dificuldade d)
+{
+    m_dificuldade = d;
+}
+
+void Forca::set_palavra_atual(std::string p)
+{
+    m_palavra_atual = p;
+    set_palavra_jogada();
+}
+
+void Forca::set_palavra_jogada()
+{
+    int ii = 0;
+    while (ii < m_palavra_atual.length())
+    {
+        m_palavra_jogada.push_back('_');
+        ++ii;
+    }
+}
 
 std::pair<bool, std::string> Forca::eh_valido()
 {
@@ -208,11 +219,11 @@ void Forca::calcular_frequencia_media()
 
     media = frequencia / ((int)m_palavras.size()); //<! Média aritimética de inteiros, já que, nesse
                                                    // caso, não existe frequência com ponto flutuante
-                                                   
+
     m_frequencia_media = media;
 }
 
-int myrandom (int i) { return std::rand() % i; }
+int myrandom(int i) { return std::rand() % i; }
 
 void Forca::sortear_palavras()
 {
@@ -220,12 +231,11 @@ void Forca::sortear_palavras()
 
     // Aleatoriedade de 2.2, itens a,b,c, subitem i.
     //   'Insira na base Palavras do Jogo N palavras aleatórias'
-    
-    
-    //Faz o sorteio linear (aleatoriedade somente por execução com main ativo)
-    //std::random_shuffle(m_palavras.begin(), m_palavras.end());
 
-    std::srand ( unsigned ( std::time(0) ) );
+    // Faz o sorteio linear (aleatoriedade somente por execução com main ativo)
+    // std::random_shuffle(m_palavras.begin(), m_palavras.end());
+
+    std::srand(unsigned(std::time(0)));
     std::random_shuffle(m_palavras.begin(), m_palavras.end(), myrandom);
     // Estudar: http://www.cplusplus.com/reference/algorithm/random_shuffle/
 
@@ -266,10 +276,9 @@ void Forca::inserir_filtradas_facil(int qtd_filtradas)
         {
             it = std::find(m_palavras_do_jogo.begin(), m_palavras_do_jogo.end(), m_palavras[i].first);
 
-
-           /** Pesquisar: it - m_palavras_do_jogo.begin() > 0
-            *  https://www.geeksforgeeks.org/std-find-in-cpp/
-            */ 
+            /** Pesquisar: it - m_palavras_do_jogo.begin() > 0
+             *  https://www.geeksforgeeks.org/std-find-in-cpp/
+             */
             if ((int)m_palavras_do_jogo.size() == 0 || it - m_palavras_do_jogo.begin() > 0)
             {
                 m_palavras_do_jogo.push_back(m_palavras[i].first);
@@ -369,27 +378,6 @@ void Forca::inserir_filtradas_dificil(int qtd_filtradas)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////
-/////////// Menus
-//////////////////////////////////////////////
-
-/* void Forca::menu_handler(int opcao){
-    std::string ultimo_menu, atual_menu = "info";
-    if(atual_menu == "info"){
-        switch(print_menu_informacoes()){
-            case 1: int i = print_menu_dificuldades();
-                    break;
-
-            case 2: print_scores_registrados();
-                    break;
-
-            case 3: break;
-        }
-    }
-
-}
-*/
-
 int Forca::print_menu_informacoes()
 {
     int escolha = 0;
@@ -397,38 +385,319 @@ int Forca::print_menu_informacoes()
     std::cout << "1 - Iniciar Jogo" << std::endl;
     std::cout << "2 - Ver scores anteriores" << std::endl;
     std::cout << "3 - Sair do Jogo" << std::endl;
-    std::cout << "Sua escolha: "; 
-    std:: cin >> escolha;
+    std::cout << "Sua escolha: ";
+    std::cin >> escolha;
+
+    std::cout << std::endl
+              << "--------------------------------------------------------------------";
+    std::cout << std::endl
+              << std::endl;
+
     return escolha;
 }
 
-int Forca::print_menu_dificuldades()
+Forca::Dificuldade Forca::print_menu_dificuldades()
 {
     int escolha = 0;
+    Forca::Dificuldade d;
+
     std::cout << "Vamos iniciar o jogo! Por favor escolha o nível de dificuldade" << std::endl;
     std::cout << "1 - Fácil" << std::endl;
     std::cout << "2 - Médio" << std::endl;
     std::cout << "3 - Difícil" << std::endl;
-    std::cout << "Sua escolha: "; 
-    std:: cin >> escolha;
-    return escolha;
+    std::cout << "Sua escolha: ";
+    std::cin >> escolha;
 
+    std::cout << std::endl
+              << "--------------------------------------------------------------------";
+    std::cout << std::endl
+              << std::endl;
 
+    if (escolha == 1)
+        d = Dificuldade::FACIL;
+    if (escolha == 2)
+        d = Dificuldade::MEDIO;
+    if (escolha == 3)
+        d = Dificuldade::DIFICIL;
+
+    return d;
 }
 
 void Forca::print_scores_registrados()
 {
-
 }
 
-void Forca::print_forca_ui()
+void Forca::proxima_palavra()
 {
-    std::cout << "Iniciando o Jogo no nível Médio, será que você conhece essa palavra?" << std::endl;
-    //
+    std::vector<std::string> dificuldades = {"Fácil", "Médio", "Difícil"};
+
+    std::cout << "Iniciando o Jogo no nível " << dificuldades[(int)m_dificuldade]
+              << ", será que você conhece essa palavra?" << std::endl;
+
+    //  Como m_palavras_do_jogo já está ordenado aleatoriamente, é possível chamar uma posição a fixa,
+    //  no caso, a última posição. Utilizando isso é possível usar std::vector.pop_back() no fim
+    //  da rodada.
+
+    set_palavra_atual(m_palavras_do_jogo[m_palavras_do_jogo.size() - 1]);
+}
+
+// str palpite é uma letra
+// preciso tratar caso não seja?
+std::pair<bool, bool> Forca::palpite(std::string palpite)
+{
+    std::pair<bool, bool> tipo_palpite;
+
+    //<! Palpite existe na palavra
+    if (m_palavra_atual.find(palpite[0]))
+        tipo_palpite.first = true;
+    else
+        tipo_palpite.first = false;
+
+    //<! Palpite é ou não é novo
+    if (m_letras_palpitadas.size() != 0)
+    {
+        for (int ii = 0; ii < (int)m_letras_palpitadas.size(); ++ii)
+        {
+            if (m_letras_palpitadas[ii] == palpite[0])
+            {
+                tipo_palpite.second = false;
+                break;
+            }
+
+            if (ii == (int)m_letras_palpitadas.size() - 1)
+            {
+                tipo_palpite.second = true;
+                m_letras_palpitadas.push_back(palpite[0]);
+            }
+        }
+    }
+    else
+    {
+        tipo_palpite.second = true;
+        m_letras_palpitadas.push_back(palpite[0]);
+    }
+
+    return tipo_palpite;
+}
+
+/**
+ * Serve para fornecer uma dica ao jogador de acordo com a dificuldade do jogo.
+ */
+
+// Obs.: tornar aleatório
+
+void Forca::dica_palavra_jogada()
+{
+
+    if (m_dificuldade == Forca::FACIL)
+    {
+        int num = std::max(1, (int)m_palavra_atual.length() / 5), count = 0;
+
+        for (int ii = 0; ii < m_palavra_atual.size(); ++ii)
+        {
+            // ii tem que ser aleatório e (...)
+            if ((m_palavra_atual[ii] != 'A') && (m_palavra_atual[ii] != 'E') &&
+                (m_palavra_atual[ii] != 'I') && (m_palavra_atual[ii] != 'O') && (m_palavra_atual[ii] != 'U'))
+            {
+                m_palavra_jogada[ii] = m_palavra_atual[ii];
+                count++;
+            }
+
+            if (count == num)
+                break;
+        }
+    }
+
+    if (m_dificuldade == Forca::MEDIO)
+    {
+        for (int ii = 0; ii < m_palavra_atual.size(); ++ii)
+        {
+            // ii tem que ser aleatório e (...)
+            if ((m_palavra_atual[ii] == 'A') || (m_palavra_atual[ii] == 'E') ||
+                (m_palavra_atual[ii] == 'I') || (m_palavra_atual[ii] == 'O') ||
+                (m_palavra_atual[ii] == 'U'))
+            {
+                m_palavra_jogada[ii] = m_palavra_atual[ii];
+                break;
+            }
+        }
+    }
+}
+
+std::string Forca::print_forca_ui()
+{
+    std::string palpite;
+    // Lacuna entre o título da página e os underscores da forca.
+    std::cout << std::endl
+              << std::endl
+              << std::endl
+              << std::endl;
+
+    for (int ii = 0; ii < (int)m_palavra_jogada.size(); ++ii)
+    {
+        if (ii != (int)m_palavra_jogada.size() - 1)
+            std::cout << m_palavra_jogada[ii] << " ";
+        else
+            std::cout << m_palavra_jogada[ii];
+    }
+    std::cout << std::endl;
+
+    std::cout << "Pontos: " << m_pontos << std::endl;
+    std::cout << "Palpite: ";
+    std::cin >> palpite;
+    std::cout << std::endl
+              << std::endl;
+    return palpite;
+}
+
+std::string Forca::print_forca_ui(std::pair<bool, bool> palpite, std::string ultimo_palpite)
+{
+    std::string str;
+    if (palpite.first == true)
+    {
+        if (palpite.second == true)
+        {
+            //{T,T}: o palpite pertence à palavra e é um palpite novo
+            std::cout << "Muito bem! A palavra contém a letra " << ultimo_palpite << "!" << std::endl;
+        }
+        else
+        {
+            //{T,F}: o palpite pertence à palavra, mas não é um palpite novo palpite
+            std::cout << "Você já tentou com a letra " << ultimo_palpite << "!" << std::endl;
+        }
+    }
+    else
+    {
+        if (palpite.second == true)
+        {
+            //{F,T} não pertence à palavra e é novo.
+            std::cout << "Meh, não achei a letra " << ultimo_palpite << "! :<" << std::endl;
+        }
+        else
+        {
+            //{F,F} não pertence à palavra e não é novo.
+            std::cout << "Você já tentou com a letra " << ultimo_palpite << "!" << std::endl;
+        }
+    }
+    // Lacuna entre o título da página e os underscores da forca.
+    // Lógica do boneco;
+    std::cout << std::endl
+              << std::endl
+              << std::endl
+              << std::endl;
+
+    for (int ii = 0; ii < (int)m_palavra_jogada.size(); ++ii)
+    {
+        if (ii != (int)m_palavra_jogada.size() - 1)
+            std::cout << m_palavra_jogada[ii] << " ";
+        else
+            std::cout << m_palavra_jogada[ii];
+    }
+    std::cout << std::endl;
+
+    atualizar_pontos(palpite, ultimo_palpite);
+    atualizar_tentativas(palpite);
+
+    std::cout << "Pontos: " << m_pontos << std::endl;
+    std::cout << "Palpite: ";
+    std::cin >> str;
+    std::cout << std::endl
+              << std::endl;
+
+    return str;
+}
+
+//[NÃO FINALIZADO]
+void atualizar_tentativas( std::pair<bool, bool> tipo_palpite ){
+    // {T,T} se o palpite pertence à palavra e é um palpite novo,
+    if (tipo_palpite.first && tipo_palpite.second)
+    {
+    }
+    // {T,F} no caso do palpite pertencer à palavra, mas não é novo.
+    if (tipo_palpite.first && !tipo_palpite.second)
+    {
+    }
+    // {F,T} caso não pertença e é novo.
+    if (!tipo_palpite.first && tipo_palpite.second)
+    {
+    }
+    // {F,F} no caso do palpite não pertencer à palavra e não é novo.
+    if (!tipo_palpite.first && !tipo_palpite.second)
+    {
+    }
+}
+
+//[NÃO FINALIZADO]
+void Forca::atualizar_pontos(std::pair<bool, bool> tipo_palpite, std::string ultimo_palpite)
+{
+    // {T,T} se o palpite pertence à palavra e é um palpite novo,
+    if (tipo_palpite.first && tipo_palpite.second)
+    {
+    }
+    // {T,F} no caso do palpite pertencer à palavra, mas não é novo.
+    if (tipo_palpite.first && !tipo_palpite.second)
+    {
+    }
+    // {F,T} caso não pertença e é novo.
+    if (!tipo_palpite.first && tipo_palpite.second)
+    {
+    }
+    // {F,F} no caso do palpite não pertencer à palavra e não é novo.
+    if (!tipo_palpite.first && !tipo_palpite.second)
+    {
+    }
+}
+
+void Forca::print_game_over()
+{
+    std::cout << "Pontos: " << m_pontos << std::endl;
+    std::cout << "O jogo acabou, a palavra era " << m_palavra_atual << "!" << std::endl;
+}
+
+bool Forca::print_continuar_jogando()
+{
+    std::string op;
+    bool b = true;
+
+    std::cout << "Você acertou! Parabéns! A palavra era " << m_palavra_atual << "!" << std::endl 
+        << std::endl;
+              
+    while (b)
+    {
+        std::cout << "Deseja continuar jogando [S/N]: ";
+        std::cin >> op;
+        if (op == "S" || op == "N")
+            b = false;
+        else
+            std::cout << "Tente novamente. Entrada Inválida." << std::endl;
+    }
+
+    if (op == "S")
+        return true;
+
+    return false;
+}
+
+//[NÃO FINALIZADO]
+bool Forca::rodada_terminada()
+{
+    //Esse método precisa chamar saber o tipo do último palpite
+    m_tentativas_restantes;
+    return true;
 }
 
 void Forca::print_filtradas()
 {
-    for (int i = 0; i < (int)m_palavras_do_jogo.size(); i++)
-        std::cout << i << ": " << m_palavras_do_jogo[i] << std::endl;
+    for (int ii = 0; ii < (int)m_palavras_do_jogo.size(); ii++)
+        std::cout << ii << ": " << m_palavras_do_jogo[ii] << std::endl;
+}
+
+std::string Forca::get_palavra_jogada()
+{
+    return m_palavra_jogada;
+}
+
+std::string Forca::get_palavra_atual()
+{
+    return m_palavra_atual;
 }

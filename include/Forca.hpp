@@ -1,6 +1,15 @@
-#include <iostream>
-#include <vector>
+// Bibliotecas para o transform
+#include <algorithm>
+#include <cctype>
 #include <fstream>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <sstream>
+
+// Bibliotecas para o sorteio
+#include <ctime>   // std::time
+#include <cstdlib> // std::rand, std::srand
 
 class Forca
 {
@@ -30,6 +39,7 @@ private:
 
     int m_tentativas_restantes; // TODO: armazenar tentativas restantes
     int m_frequencia_media;     // Armazenar a frequência média de palavras
+    int m_pontos;     // Armazenar a frequência média de palavras
 
 public:
     /**
@@ -53,8 +63,6 @@ public:
      * (Opções 'Inicar Jogo', 'Ver scores anteriores' e 'Sair do jogo')
      */
 
-    void menu_handler();
-
     int print_menu_informacoes();
 
     /**
@@ -68,12 +76,17 @@ public:
      * (Dificuldades: 'Fácil', 'Médio' e 'Difícil)
      */
 
-    int print_menu_dificuldades();
+    Dificuldade print_menu_dificuldades();
 
     /**
      * Printa a user interface da forca baseada em m_palavra_jogada e m_palavra_atual
      */
-    void print_forca_ui();
+    std::string print_forca_ui();
+    std::string print_forca_ui(std::pair<bool, bool> palpite, std::string ultimo_palpite);
+
+
+    void print_game_over();
+    bool print_continuar_jogando();
 
     /////////////////////////////////////////////////////////////////////////
     /////////// Validação
@@ -85,10 +98,6 @@ public:
     void carregar_arquivos();
 
     /**
-     * ??? 
-     * carregar_arquivos() chamado no escopo de em eh_valido?
-     * ???
-     * 
      * Valida os arquivos de entrada de acordo com as especificações.
      * Ao validar os arquivos, no caso de arquivos inválidos, este método deve retornar a
      * razão correspondente de acordo com as especificações.
@@ -96,8 +105,6 @@ public:
      */
 
     std::pair<bool, std::string> eh_valido();
-
-
 
     /**
      * Modifica a dificuldade do jogo.
@@ -116,7 +123,7 @@ public:
      * alterando o valor de m_palavra_jogada de acordo.
      * @return o valor do atributo m_palavra_jogada.
      */
-    std::string proxima_palavra();
+    void proxima_palavra();
 
     /**
      * Retorna a palavra atual que está sendo jogada.
@@ -144,8 +151,10 @@ public:
      * Este método deve atualizar os atributos m_tentativas, m_palavra_jogada e m_letras_palpitadas, para refletir
      * as situações citadas. No caso da letra já ter sido escolhida, o método não deve atualizar m_tentativas.
      * @param palpite uma letra, que deve ser testada se pertence à palavra.
-     * @return {T,T} se o palpite pertence à palavra e é um palpite novo, {F,T} caso não pertença e é novo.
-     *         {T,F} ou {F,F} no caso do palpite pertencer/não pertencer à palavra, mas não é novo.
+     * @return {T,T} se o palpite pertence à palavra e é um palpite novo, 
+     *         {T,F} no caso do palpite pertencer à palavra, mas não é novo.
+     *         {F,T} caso não pertença e é novo.
+     *         {F,F} no caso do palpite não pertencer à palavra e não é novo.
      */
     std::pair<bool, bool> palpite(std::string palpite);
 
@@ -154,8 +163,11 @@ public:
      * @return T caso o m_tentativas_restantes do jogo esteja igual a 0 ou se o usuário
      *         acertou toda a palavra, F caso contrário.
      */
+
     bool rodada_terminada();
 
+    void atualizar_tentativas( std::pair<bool, bool> tipo_palpite);
+    
     /**
      * Reseta o valor de tentativas restantes para 5 e do atributo m_letras_palpitadas para vazio
      * Este método é útil no caso do jogador escolher continuar o jogo, ou no início
@@ -204,11 +216,17 @@ public:
 
     void filtrar_palavras_por_dificuldade( Dificuldade dificuldade, int frequencia_media );
 
+    void dica_palavra_jogada();
+
     void print_filtradas();
+
 
     private:
         void inserir_filtradas_facil(int qtd_filtradas);
         void inserir_filtradas_medio(int qtd_filtradas);
         void inserir_filtradas_dificil(int qtd_filtradas);
+        void set_palavra_atual(std::string palavra_atual);
+        void set_palavra_jogada();
+        void atualizar_pontos(std::pair<bool, bool> tipo_palpite, std::string ultimo_palpite);
         // int myrandom (int i);
 };
