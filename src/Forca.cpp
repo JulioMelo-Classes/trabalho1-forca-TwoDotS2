@@ -1,3 +1,8 @@
+/**
+ * Tags:
+ *      [NÃO FINALIZADO], [DEBUG]
+ */
+
 #include "../include/Forca.hpp"
 
 // Construtor
@@ -695,6 +700,18 @@ bool Forca::validar_palpite(std::string &palpite){
     if( (palpite[0] < 'A' || palpite[0] > 'Z') ) return false;
 
     return true;
+}
+
+//[NÃO FINALIZADO]
+void Forca::print_hangman(){
+    std::cout << std::endl << std::endl;
+	std::cout << "  -----" << std::endl;
+	std::cout << "  |   |" << std::endl; 
+	std::cout << "  |";    if(m_tentativas_restantes>=1) std::cout<<"   O    "; std::cout<<std::endl;
+	std::cout << "  |";    if(m_tentativas_restantes>=3) std::cout<<"  /|\\   "; std::cout<<std::endl;
+	std::cout << "  |";    if(m_tentativas_restantes>=5) std::cout<<"  / \\    "; std::cout<<std::endl;
+	std::cout << "  |"   <<std::endl; 
+	std::cout << "__|__" <<std::endl;
 }
 
 std::string Forca::print_forca_ui()
