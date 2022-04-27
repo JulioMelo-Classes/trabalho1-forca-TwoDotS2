@@ -42,6 +42,7 @@ private:
     int m_pontos;     // Armazenar a frequência média de palavras
 
 public:
+
     /**
      * Cria a um objeto Forca
      * O construtor pode ou não validar os arquivos de entrada, no entanto, mesmo com
@@ -62,11 +63,10 @@ public:
      * Printa o menu de informações do jogo da forca.
      * (Opções 'Inicar Jogo', 'Ver scores anteriores' e 'Sair do jogo')
      */
-
     int print_menu_informacoes();
 
     /**
-     * Printa os scores registrados
+     * Printa os scores registrados.
      */
     void print_scores_registrados();
 
@@ -75,17 +75,24 @@ public:
      *  tenha selecionado a opção de iniciar o jogo.
      * (Dificuldades: 'Fácil', 'Médio' e 'Difícil)
      */
-
     Dificuldade print_menu_dificuldades();
 
     /**
-     * Printa a user interface da forca baseada em m_palavra_jogada e m_palavra_atual
+     * Printa a user interface da forca baseada em m_palavra_jogada e m_palavra_atual. O método sobrecarregado tem como objetivo
+     * dar uma resposta difente, de acordo com o tipo do palpite, definido em palpite().
      */
     std::string print_forca_ui();
     std::string print_forca_ui(std::pair<bool, bool> palpite, std::string ultimo_palpite);
 
 
+    /**
+     * Printa a tela de game over, caso o usuário perca a rodada.
+     */
     void print_game_over();
+
+    /**
+     * Caso o jogador ganhe a rodada, pergunta se quer continuando até o fim.
+     */
     bool print_continuar_jogando();
 
     /////////////////////////////////////////////////////////////////////////
@@ -107,15 +114,6 @@ public:
     std::pair<bool, std::string> eh_valido();
 
     /**
-     * Modifica a dificuldade do jogo.
-     * Este método modifica a dificuldade do jogo gerando um novo vetor palavras_do_jogo
-     * toda vez que é chamado.
-     * @param d a dificuldade desejada
-     * @see proxima_palavra
-     */
-    void set_dificuldade(Dificuldade d);
-
-    /**
      * Retorna a próxima palavra de acordo com a dificuldade atual.
      * Este método deve atualizar o valor dos atributos m_palavra_atual, com a palavra atual,
      * do atributo m_palavra_jogada com um texto no formato "_ _ _ _ ... _".
@@ -124,23 +122,6 @@ public:
      * @return o valor do atributo m_palavra_jogada.
      */
     void proxima_palavra();
-
-    /**
-     * Retorna a palavra atual que está sendo jogada.
-     * Diferente do método proxima_palavra(), este método __não atualiza__ o atributo
-     * m_palavra_atual, apenas retorna o atributo m_palavra_jogada que é a palavra no
-     * formato  "_ _ _ _ ... _" contendo todas as letras
-     * já acertadas/sorteadas ao invés de “_”.
-     * @return a palavra atualmente sendo jogada.
-     */
-    std::string get_palavra_jogada();
-
-    /**
-     * Retorna o valor da palavra atual, útil no caso de um game over, para mostrar a palavra que estava
-     * sendo jogada
-     * @return o valor do atributo palavra_atual
-     **/
-    std::string get_palavra_atual();
 
     /**
      * Testa se uma letra pertence á palavra atual e se já foi jogada pelo jogador.
@@ -166,7 +147,20 @@ public:
 
     bool rodada_terminada();
 
+    /**
+     * Atualizar quantas tentativas ainda são possíveis, alterando o valor de m_tentativas_restantes
+     * 
+     * @param tipo_palpite baseado no modelo de retorno de palpite().
+     */
     void atualizar_tentativas( std::pair<bool, bool> tipo_palpite);
+
+
+    /**
+     * Atualizar os pontos baseado no tipo de palpite ({T, T}, ... {F, F}), alternado o valor de m_pontos
+     * 
+     * @param tipo_palpite baseado no modelo de retorno de palpite().
+     */
+    void atualizar_pontos(std::pair<bool, bool> tipo_palpite, std::string ultimo_palpite);
     
     /**
      * Reseta o valor de tentativas restantes para 5 e do atributo m_letras_palpitadas para vazio
@@ -176,57 +170,92 @@ public:
      */
     void reset_rodada();
 
-    /**
-     * Retorna a quantidade de tentativas restantes.
-     * @return a quantidade de tentativas restantes.
-     */
-    int get_tentativas_restantes();
-
-    /**
-     * Definir o valor médio da frequência das palavras.
-     *
-     */
-
-
     /////////////////////////////////////////////////////////////////////////
     /////////// Sorteio
     //////////////////////////////////////////////
 
     /**
-     * Uma vez que a lista de palavras já foi validada, é necessário fazer a
-     * o cálculo da média para o sorteio da palavra.
-     * @param palavras
-     * @return int
+     * Definir o valor médio da frequência das palavras.
+     *
      */
-
     void calcular_frequencia_media();
 
     /**
-     * Define as palavras do jogo atual
+     * Define as palavras de do container de "Palavaras do Jogo" (m_palavras_do_jogo), ordenando aleatoriamente o vetor m_palavras
      */
     void sortear_palavras();
 
     /**
-     * Filtrar as palavras do jogo baseadas na dificuldade definida
-     * @param dificuldade dificuldade atual do jogo 
-     * @param palavras vetor de pares com as palavras e os íncidência de uso
-     * @param frequencia_media a frequêcia média das palavras utilizadas no arquivo base
-     * @return std::vector<std::string> 
+     * Essa função serve para gerar os valores previstos por 3b) iii. e 3c) iii. 
      */
-
-    void filtrar_palavras_por_dificuldade( Dificuldade dificuldade, int frequencia_media );
-
     void dica_palavra_jogada();
 
+    /**
+     * Função para auxiliar no debug manual do sorteio das palavras de m_palavras_do_jogo por sortear_palavras()
+     */
     void print_filtradas();
 
+    /////////////////////////////////////////////////////////////////////////
+    /////////// Getters e Setters
+    //////////////////////////////////////////////
+    
+    /**
+     * Retorna a quantidade de tentativas restantes.
+     * @return a quantidade de tentativas restantes.
+     */
 
-    private:
-        void inserir_filtradas_facil(int qtd_filtradas);
-        void inserir_filtradas_medio(int qtd_filtradas);
-        void inserir_filtradas_dificil(int qtd_filtradas);
-        void set_palavra_atual(std::string palavra_atual);
-        void set_palavra_jogada();
-        void atualizar_pontos(std::pair<bool, bool> tipo_palpite, std::string ultimo_palpite);
-        // int myrandom (int i);
+    int get_tentativas_restantes();
+
+    /**
+     * Retorna a palavra atual que está sendo jogada.
+     * Diferente do método proxima_palavra(), este método __não atualiza__ o atributo
+     * m_palavra_atual, apenas retorna o atributo m_palavra_jogada que é a palavra no
+     * formato  "_ _ _ _ ... _" contendo todas as letras
+     * já acertadas/sorteadas ao invés de “_”.
+     * @return a palavra atualmente sendo jogada.
+     */
+    std::string get_palavra_jogada();
+
+    /**
+     * Retorna o valor da palavra atual, útil no caso de um game over, para mostrar a palavra que estava
+     * sendo jogada
+     * @return o valor do atributo palavra_atual
+     **/
+    std::string get_palavra_atual();
+
+        /**
+     * Modifica a dificuldade do jogo.
+     * Este método modifica a dificuldade do jogo gerando um novo vetor palavras_do_jogo
+     * toda vez que é chamado.
+     * @param d a dificuldade desejada
+     * @see proxima_palavra
+     */
+    void set_dificuldade(Dificuldade d);
+
+private:
+    //<! As funções inserir_filtradas_(dificuldade) auxiliam na modularização de inserir
+
+    /**
+     * O objetivo dessa função é tornar mais legível a função sortear_palavras().
+     * 'inserir_filtradas_facil' serve para salvar as palavras da base de acordo com a condição 'Fácil'
+     * @param qtd_filtradas
+     */
+    void inserir_filtradas_facil(int qtd_filtradas);
+        
+    /**
+     * O objetivo dessa função é tornar mais legível a função sortear_palavras().
+     * 'inserir_filtradas_medio' serve para salvar as palavras da base de acordo com a condição 'Médio'
+     * @param qtd_filtradas
+     */
+    void inserir_filtradas_medio(int qtd_filtradas);
+
+    /**
+     * O objetivo dessa função é tornar mais legível a função sortear_palavras().
+     * 'inserir_filtradas_dificil' serve para salvar as palavras da base de acordo com a condição 'Difícil'
+     * @param qtd_filtradas
+     */
+    void inserir_filtradas_dificil(int qtd_filtradas);
+
+    void set_palavra_atual(std::string palavra_atual);
+    void set_palavra_jogada();
 };

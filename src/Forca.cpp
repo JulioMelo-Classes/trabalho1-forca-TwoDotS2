@@ -434,14 +434,6 @@ void Forca::sortear_palavras()
     }
 }
 
-/**
- * O objetivo dessa função é tornar mais legível a função filtrar_palavras_por_dificuldade.
- * 'inserir_filtradas_facil' serve para salvar as palavras da base de acordo com a condição 'Fácil'
- * @param palavras
- * @param m_palavras_do_jogo é o vetor que ira receber as palavras para o jogo
- * @param frequencia_media
- * @param qtd_filtradas
- */
 void Forca::inserir_filtradas_facil(int qtd_filtradas)
 {
     std::vector<std::string>::iterator it;
@@ -784,9 +776,6 @@ std::string Forca::print_forca_ui(std::pair<bool, bool> palpite, std::string ult
               << std::endl
               << std::endl
               << std::endl;
-
-    atualizar_pontos(palpite, ultimo_palpite);
-    atualizar_tentativas(palpite);
 
     for (int ii = 0; ii < (int)m_palavra_jogada.size(); ++ii)
     {

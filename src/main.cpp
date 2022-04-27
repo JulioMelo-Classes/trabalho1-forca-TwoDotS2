@@ -50,7 +50,10 @@ int main(int argc, char *argv[])
                 while (!forca.rodada_terminada())
                 { // loop da rodada
                     //palpite() atualiza rodada?
+                    
                     auto result = forca.palpite(palpite);
+                    forca.atualizar_tentativas(result);
+                    forca.atualizar_pontos(result, palpite);
                     palpite = forca.print_forca_ui(result, palpite);
                 }
 
