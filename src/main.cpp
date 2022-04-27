@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
   
     forca.carregar_arquivos();
     
-  /*
+  
     while ( true )
     {
         //imprime o menu principal e a escolha do usuário
@@ -51,7 +51,6 @@ int main(int argc, char *argv[])
                 { // loop da rodada
                     //palpite() atualiza rodada?
                     auto result = forca.palpite(palpite);
-                    forca.atualizar_tentativas(result);
                     palpite = forca.print_forca_ui(result, palpite);
                 }
 
@@ -81,6 +80,6 @@ int main(int argc, char *argv[])
 
         else break;
     }
-    */
+    
     return 0;
 }

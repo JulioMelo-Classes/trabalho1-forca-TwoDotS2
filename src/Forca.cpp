@@ -247,7 +247,7 @@ void Forca::print_scores_registrados()
         tamPontos = std::max(tamPontos, (int)score_s.size());
     }
 
-    //Cabeçalho
+    // Cabeçalho
     std::cout << std::left;
     std::cout.width(tamNivel + 1);
     std::cout << stringNivel + " ";
@@ -614,42 +614,28 @@ void Forca::proxima_palavra()
     set_palavra_atual(m_palavras_do_jogo[m_palavras_do_jogo.size() - 1]);
 }
 
-// str palpite é uma letra
-// preciso tratar caso não seja?
 std::pair<bool, bool> Forca::palpite(std::string palpite)
 {
     std::pair<bool, bool> tipo_palpite;
+    std::vector<char>::iterator it_letras_palpitadas;
 
     //<! Palpite existe na palavra
-    if (m_palavra_atual.find(palpite[0]))
+    if (m_palavra_atual.find(palpite[0]) != std::string::npos)
         tipo_palpite.first = true;
     else
         tipo_palpite.first = false;
 
     //<! Palpite é ou não é novo
-    if (m_letras_palpitadas.size() != 0)
-    {
-        for (int ii = 0; ii < (int)m_letras_palpitadas.size(); ++ii)
-        {
-            if (m_letras_palpitadas[ii] == palpite[0])
-            {
-                tipo_palpite.second = false;
-                break;
-            }
 
-            if (ii == (int)m_letras_palpitadas.size() - 1)
-            {
-                tipo_palpite.second = true;
-                m_letras_palpitadas.push_back(palpite[0]);
-            }
-        }
-    }
-    else
+    it_letras_palpitadas = std::find(m_letras_palpitadas.begin(), m_letras_palpitadas.end(), palpite[0]);
+    if (it_letras_palpitadas == m_letras_palpitadas.end())
     {
         tipo_palpite.second = true;
         m_letras_palpitadas.push_back(palpite[0]);
-    }
+    } else
+        tipo_palpite.second = false;
 
+    std::cout << "{ " << tipo_palpite.first << ", " << tipo_palpite.second << " }";
     return tipo_palpite;
 }
 
@@ -664,38 +650,40 @@ void Forca::dica_palavra_jogada()
 {
     std::srand(unsigned(std::time(0)));
     std::vector<int> last_indexes;
-    int random; 
-      
-    //Preciso garantir que vai acontecer
+    std::vector<int>::iterator it;
+    int random;
+
+    // Preciso garantir que vai acontecer
     if (m_dificuldade == Forca::FACIL)
     {
-        int num = std::max(1, (int)m_palavra_atual.size() / 5), count = 0; 
-        while(count < num){
-            
-          random = rand () % ((int)m_palavra_atual.size()-1);
-          
-          if(/*std::find(last_indexes.begin(), last_indexes.end(), random) -*/ m_palavra_atual.size() > 0)
-            do{
-              random = rand () % (int)m_palavra_atual.size();
-            } while(/*!std::find(last_indexes.begin(), last_indexes.end(), random)*/ true);
-          
-            if ((m_palavra_atual[random] != 'A') && (m_palavra_atual[random] != 'E') &&
-              (m_palavra_atual[random] != 'I') && (m_palavra_atual[random] != 'O') && (m_palavra_atual[random] != 'U')){
-                m_palavra_jogada[random] = m_palavra_atual[random];
-                count++;
-              }
-        }
-            
+        int num = std::max(1, (int)m_palavra_atual.size() / 5), count = 0;
+        while (count < num)
+        {
 
-          
+            random = rand() % ((int)m_palavra_atual.size() - 1);
+            it = std::find(last_indexes.begin(), last_indexes.end(), random);
+
+            // Se o índice não foi sorteado ainda
+            if (it == last_indexes.end())
+            {
+                // Se o caracter no índice não sorteado não é uma vogal
+                if ((m_palavra_atual[random] != 'A') && (m_palavra_atual[random] != 'E') &&
+                    (m_palavra_atual[random] != 'I') && (m_palavra_atual[random] != 'O') && (m_palavra_atual[random] != 'U'))
+                {
+                    m_palavra_jogada[random] = m_palavra_atual[random];
+                    count++;
+                }
+
+                last_indexes.push_back(random);
+            }
         }
+    }
 
     if (m_dificuldade == Forca::MEDIO)
     {
-      //Baixas chances de repetição consecutiva
-          while(true)
-          {
-             random = rand () % ((int) m_palavra_atual.size()-1);
+        while (true)
+        {
+            random = rand() % ((int)m_palavra_atual.size() - 1);
 
             if ((m_palavra_atual[random] == 'A') || (m_palavra_atual[random] == 'E') ||
                 (m_palavra_atual[random] == 'I') || (m_palavra_atual[random] == 'O') ||
@@ -704,13 +692,23 @@ void Forca::dica_palavra_jogada()
                 m_palavra_jogada[random] = m_palavra_atual[random];
                 break;
             }
-          }
+        }
     }
 }
 
-
 std::string Forca::print_forca_ui()
 {
+    std::cout << "(Palavra atual: " << m_palavra_atual << " )" << std::endl;
+    std::cout << "{ ";
+    for (int ii = 0; ii < (int)m_letras_palpitadas.size(); ++ii)
+    {
+        if (ii == (int)m_letras_palpitadas.size())
+            std::cout << m_arquivo_palavras[ii];
+        else
+            std::cout << m_arquivo_palavras[ii] << ", ";
+    }
+    std::cout << " }" << std::endl;
+
     std::string palpite;
     // Lacuna entre o título da página e os underscores da forca.
     std::cout << std::endl
@@ -732,13 +730,24 @@ std::string Forca::print_forca_ui()
     std::cin >> palpite;
     std::cout << std::endl
               << std::endl;
+
     return palpite;
 }
 
-
-      
 std::string Forca::print_forca_ui(std::pair<bool, bool> palpite, std::string ultimo_palpite)
 {
+    std::cout << "(Palavra atual: " << m_palavra_atual << " )" << std::endl;
+
+    std::cout << "{ ";
+    for (int ii = 0; ii < (int)m_letras_palpitadas.size(); ++ii)
+    {
+        if (ii == (int)m_letras_palpitadas.size())
+            std::cout << m_letras_palpitadas[ii];
+        else
+            std::cout << m_letras_palpitadas[ii] << ", ";
+    }
+    std::cout << " }" << std::endl;
+
     std::string str;
     if (palpite.first == true)
     {
@@ -766,12 +775,18 @@ std::string Forca::print_forca_ui(std::pair<bool, bool> palpite, std::string ult
             std::cout << "Você já tentou com a letra " << ultimo_palpite << "!" << std::endl;
         }
     }
+
     // Lacuna entre o título da página e os underscores da forca.
+
     // Lógica do boneco;
+
     std::cout << std::endl
               << std::endl
               << std::endl
               << std::endl;
+
+    atualizar_pontos(palpite, ultimo_palpite);
+    atualizar_tentativas(palpite);
 
     for (int ii = 0; ii < (int)m_palavra_jogada.size(); ++ii)
     {
@@ -782,9 +797,6 @@ std::string Forca::print_forca_ui(std::pair<bool, bool> palpite, std::string ult
     }
     std::cout << std::endl;
 
-    atualizar_pontos(palpite, ultimo_palpite);
-    atualizar_tentativas(palpite);
-
     std::cout << "Pontos: " << m_pontos << std::endl;
     std::cout << "Palpite: ";
     std::cin >> str;
@@ -794,69 +806,58 @@ std::string Forca::print_forca_ui(std::pair<bool, bool> palpite, std::string ult
     return str;
 }
 
-
-      
-//[NÃO FINALIZADO]
 void Forca::atualizar_tentativas(std::pair<bool, bool> tipo_palpite)
-{   // Nos casos 1.{T, T} e 2.{T, F} não diminuem as tentativas por definição
-    // 1. é o objetivo do palpite;
-    // 2. é o item 4.e) do documento
-    // {F,T} caso não pertença e é novo.
-    // {F,F} no caso do palpite não pertencer à palavra e não é novo.
-    if ((!tipo_palpite.first && tipo_palpite.second) || 
-        (!tipo_palpite.first && !tipo_palpite.second) )
+{
+    // Há redução de palpites quando o mesmo não fizer parte da palavra
+    if (!tipo_palpite.first)
     {
-      --m_tentativas_restantes;
+        --m_tentativas_restantes;
     }
-  
 }
 
-
-      
 //[NÃO FINALIZADO]
 void Forca::atualizar_pontos(std::pair<bool, bool> tipo_palpite, std::string ultimo_palpite)
 {
+    std::string str = "_";
     // {T,T} se o palpite pertence à palavra e é um palpite novo,
-    // if (tipo_palpite.first && tipo_palpite.second)
-    // {
-    //   for(int ii = 0; ii < m_palavra_atual.size(); ++ii){
-    //     if (m_palavra_atual[ii] == ultimo_palpite)
-    //     {
-    //       m_palavra_jogada[ii] = ultimo_palpite;
+    if (tipo_palpite.first && tipo_palpite.second)
+    {
+        for (int ii = 0; ii < m_palavra_atual.size(); ++ii)
+        {
+            // É necessário comparar (m_palavra_jogada[ii] == "_"), umas vez que existe a 'dica'
+            // no início
+            if (m_palavra_atual[ii] == ultimo_palpite[0] && m_palavra_jogada[ii] == str[0])
+            {
 
-    //       //A última letra vale 2 pontos
-    //       if(ii == m_palavra_atual.size()-1)  
-    //         m_pontos += 2;
-    //       else
-    //         ++m_pontos;
-    //     }
-    //   }
-    // }
-  
+                m_palavra_jogada[ii] = ultimo_palpite[0];
+
+                // A última letra vale 2 pontos
+                if (ii == m_palavra_atual.size() - 1)
+                    m_pontos += 2;
+                else
+                    ++m_pontos;
+            }
+        }
+    }
+
     // {T,F} no caso do palpite pertencer à palavra, mas não é novo.
-    //Caso desnecessário pelo item 4.e)
-  
+    // Caso desnecessário pelo item 4.e)
+
     // {F,T} caso não pertença e é novo.
     if (!tipo_palpite.first && tipo_palpite.second)
-      --m_pontos;
-    
+        --m_pontos;
+
     // {F,F} no caso do palpite não pertencer à palavra e não é novo.
     if (!tipo_palpite.first && !tipo_palpite.second)
-      --m_pontos;
-    
+        --m_pontos;
 }
 
-
-
-      
 void Forca::print_game_over()
 {
     std::cout << "Pontos: " << m_pontos << std::endl;
     std::cout << "O jogo acabou, a palavra era " << m_palavra_atual << "!" << std::endl;
 }
 
-
-      
 bool Forca::print_continuar_jogando()
 {
     std::string op;
@@ -881,17 +882,27 @@ bool Forca::print_continuar_jogando()
     return false;
 }
 
-//[NÃO FINALIZADO]
 bool Forca::rodada_terminada()
 {
-    if(m_tentativas_restantes != 0) return false;
+    // A rodada termina ou quando não existem mais tentativas ou quando o jogador vence
+    if (m_palavra_atual == m_palavra_jogada)
+        return true;
+
+    if (m_tentativas_restantes != 0)
+        return false;
+
     return true;
 }
 
+// Método para observar se o sorteio das palavras do jogo funcionou
 void Forca::print_filtradas()
 {
     for (int ii = 0; ii < (int)m_palavras_do_jogo.size(); ii++)
         std::cout << ii << ": " << m_palavras_do_jogo[ii] << std::endl;
+}
+
+void Forca::reset_rodada()
+{
 }
 
 std::string Forca::get_palavra_jogada()
@@ -902,8 +913,4 @@ std::string Forca::get_palavra_jogada()
 std::string Forca::get_palavra_atual()
 {
     return m_palavra_atual;
-}
-
-void Forca::reset_rodada()
-{
 }
