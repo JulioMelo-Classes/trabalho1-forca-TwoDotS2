@@ -170,6 +170,7 @@ public:
      */
     void reset_rodada();
 
+
     /////////////////////////////////////////////////////////////////////////
     /////////// Sorteio
     //////////////////////////////////////////////
@@ -258,4 +259,6 @@ private:
 
     void set_palavra_atual(std::string palavra_atual);
     void set_palavra_jogada();
+
+    bool validar_palpite(std::string &palpite);
 };

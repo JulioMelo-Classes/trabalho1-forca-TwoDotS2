@@ -688,8 +688,18 @@ void Forca::dica_palavra_jogada()
     }
 }
 
+//Retorna se o palpite é válido
+bool Forca::validar_palpite(std::string &palpite){
+    
+    if(palpite.size() != 1) return false;
+    if( (palpite[0] < 'A' || palpite[0] > 'Z') ) return false;
+
+    return true;
+}
+
 std::string Forca::print_forca_ui()
 {
+    //[DEBUG]
     std::cout << "(Palavra atual: " << m_palavra_atual << " )" << std::endl;
     std::cout << "{ ";
     for (int ii = 0; ii < (int)m_letras_palpitadas.size(); ++ii)
@@ -719,15 +729,25 @@ std::string Forca::print_forca_ui()
 
     std::cout << "Pontos: " << m_pontos << std::endl;
     std::cout << "Palpite: ";
+    
     std::cin >> palpite;
-    std::cout << std::endl
-              << std::endl;
+
+    std::cout << std::endl;
+
+    while(!validar_palpite(palpite)){
+        std::cout << "Palpite Inválido. Digite novo palpite:" << std::endl;
+        std::cout << "Palpite: ";
+        std::cin >> palpite; 
+    }
+
+    std::cout << std::endl << std::endl;
 
     return palpite;
 }
 
 std::string Forca::print_forca_ui(std::pair<bool, bool> palpite, std::string ultimo_palpite)
 {
+    //[DEBUG]
     std::cout << "(Palavra atual: " << m_palavra_atual << " )" << std::endl;
 
     std::cout << "{ ";
@@ -789,8 +809,16 @@ std::string Forca::print_forca_ui(std::pair<bool, bool> palpite, std::string ult
     std::cout << "Pontos: " << m_pontos << std::endl;
     std::cout << "Palpite: ";
     std::cin >> str;
-    std::cout << std::endl
-              << std::endl;
+
+    std::cout << std::endl;
+
+    while(!validar_palpite(str)){
+        std::cout << "Palpite Inválido. Digite novo palpite:" << std::endl;
+        std::cout << "Palpite: ";
+        std::cin >> str; 
+    }
+
+    std::cout << std::endl << std::endl;
 
     return str;
 }
@@ -839,6 +867,9 @@ void Forca::atualizar_pontos(std::pair<bool, bool> tipo_palpite, std::string ult
     // {F,F} no caso do palpite não pertencer à palavra e não é novo.
     if (!tipo_palpite.first && !tipo_palpite.second)
         --m_pontos;
+
+    //[DEBUG]
+    std::cout << "Atualizar_Pontos: " << m_palavra_atual << " = " << m_palavra_jogada << std::endl; 
 }
 
 void Forca::print_game_over()
@@ -855,6 +886,8 @@ bool Forca::print_continuar_jogando()
     std::cout << "Você acertou! Parabéns! A palavra era " << m_palavra_atual << "!" << std::endl
               << std::endl;
 
+    std::cout << "--------------------------------------------------------------------" << std::endl << std::endl;
+   
     while (b)
     {
         std::cout << "Deseja continuar jogando [S/N]: ";
@@ -865,6 +898,9 @@ bool Forca::print_continuar_jogando()
             std::cout << "Tente novamente. Entrada Inválida." << std::endl;
     }
 
+    std::cout << std::endl;
+    std::cout << "--------------------------------------------------------------------" << std::endl;
+    
     if (op == "S")
         return true;
 
@@ -874,6 +910,7 @@ bool Forca::print_continuar_jogando()
 bool Forca::rodada_terminada()
 {
     // A rodada termina ou quando não existem mais tentativas ou quando o jogador vence
+
     if (m_palavra_atual == m_palavra_jogada)
         return true;
 

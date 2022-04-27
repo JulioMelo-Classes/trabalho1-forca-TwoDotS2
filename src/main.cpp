@@ -24,12 +24,15 @@ int main(int argc, char *argv[])
   
     forca.carregar_arquivos();
     
-  
+    //Lounge "Menu informações" | Nível de Acesso 0
     while ( true )
     {
         //imprime o menu principal e a escolha do usuário
-        op_principal = forca.print_menu_informacoes();
+        op_principal = forca.print_menu_informacoes(); //<! Qualquer opção diferente ou de 1 ou de 2 resulta  
         
+        
+
+        //Lounge "Dificuldades" | Nível de Acesso 1
         if (op_principal == 1)
         {
             Forca::Dificuldade d = forca.print_menu_dificuldades();
@@ -38,6 +41,7 @@ int main(int argc, char *argv[])
             //Sorteia as palavras
             forca.sortear_palavras();
 
+            //In game | Nível de Acesso 2.1
             while ( true )
             {
                 //define a palavra da rodada atual e a sua forma em underscores
@@ -45,20 +49,27 @@ int main(int argc, char *argv[])
 
                 //exibe interface do jogo
                 forca.dica_palavra_jogada(); 
+
                 string palpite = forca.print_forca_ui();
                 
                 while (!forca.rodada_terminada())
                 { // loop da rodada
-                    //palpite() atualiza rodada?
                     
                     auto result = forca.palpite(palpite);
+
                     forca.atualizar_tentativas(result);
                     forca.atualizar_pontos(result, palpite);
+
+                    if(forca.rodada_terminada()) break;
+
                     palpite = forca.print_forca_ui(result, palpite);
                 }
 
                 if (forca.get_palavra_atual() == forca.get_palavra_jogada())
-                { //Pergunta se quer continuar jogando
+                { 
+                    //Lounge vitória da rodada | Nível de Acesso 3
+                    //Pergunta se quer continuar jogando
+                    
                     bool op = forca.print_continuar_jogando();
                     if (op)
                     {
@@ -78,6 +89,7 @@ int main(int argc, char *argv[])
             //ler informações do jogador para o score e gravar no arquivo
         }
         
+        //Lounge scores de jogatinas anteriores| Nível de Acesso 2.2
         else if (op_principal == 2)
             forca.print_scores_registrados();
 
