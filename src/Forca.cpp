@@ -703,6 +703,7 @@ bool Forca::validar_palpite(std::string &palpite){
 }
 
 //[NÃO FINALIZADO]
+//<! Referência: https://github.com/AngularsCoding/Hangman/blob/main/Hangman.cpp
 void Forca::print_hangman(){
     std::cout << std::endl << std::endl;
 	std::cout << "  -----" << std::endl;
@@ -865,11 +866,11 @@ void Forca::atualizar_pontos(std::pair<bool, bool> tipo_palpite, std::string ult
 
                 m_palavra_jogada[ii] = ultimo_palpite[0];
 
+                ++m_pontos;
+                
                 // A última letra vale 2 pontos
                 if (ii == m_palavra_atual.size() - 1)
                     m_pontos += 2;
-                else
-                    ++m_pontos;
             }
         }
     }
