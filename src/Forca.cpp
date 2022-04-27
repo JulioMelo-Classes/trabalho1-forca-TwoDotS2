@@ -1,6 +1,6 @@
 /**
  * Tags:
- *      [NÃO FINALIZADO], [DEBUG]
+ *      [NÃO FINALIZADO], [DEBUG], [TESTE]
  */
 
 #include "../include/Forca.hpp"
@@ -639,9 +639,6 @@ std::pair<bool, bool> Forca::palpite(std::string palpite)
  * Serve para fornecer uma dica ao jogador de acordo com a dificuldade do jogo.
  */
 
-// Obs.: tornar aleatório
-
-//[NÃO SEI SE FUNCIONA AINDA]
 void Forca::dica_palavra_jogada()
 {
     std::srand(unsigned(std::time(0)));
@@ -717,8 +714,8 @@ void Forca::print_hangman(){
 std::string Forca::print_forca_ui()
 {
     std::cout << "--------------------------------------------------------------------" << std::endl;
-    //[DEBUG]
-    std::cout << "(Palavra atual: " << m_palavra_atual << " )" << std::endl;
+    //[TESTE]
+    //std::cout << "(Palavra atual: " << m_palavra_atual << " )" << std::endl;
     std::cout << "[ ";
     for (int ii = 0; ii < (int)m_letras_palpitadas.size(); ++ii)
     {
@@ -766,8 +763,8 @@ std::string Forca::print_forca_ui()
 std::string Forca::print_forca_ui(std::pair<bool, bool> palpite, std::string ultimo_palpite)
 {
     std::cout << "--------------------------------------------------------------------" << std::endl;
-    //[DEBUG]
-    std::cout << "(Palavra atual: " << m_palavra_atual << " )" << std::endl;
+    //[TESTE]
+    //std::cout << "(Palavra atual: " << m_palavra_atual << " )" << std::endl;
 
     std::cout << "[ ";
     for (int ii = 0; ii < (int)m_letras_palpitadas.size(); ++ii)
