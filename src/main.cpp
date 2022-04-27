@@ -46,7 +46,13 @@ int main(int argc, char *argv[])
             {
                 //define a palavra da rodada atual e a sua forma em underscores
                 forca.proxima_palavra();
-
+                if(forca.get_palavra_atual_size() == 0) 
+                {
+                  forca.print_acertou_todas_palavras();
+                  forca.registrar_score();
+                  break;  
+                }
+              
                 //exibe interface do jogo
                 forca.dica_palavra_jogada(); 
 
@@ -77,7 +83,10 @@ int main(int argc, char *argv[])
                         //std::vector.pop()
                     }
                     else
-                        break;
+                    {
+                      forca.registrar_score();
+                      break;
+                    }
                         
                 }
                 else

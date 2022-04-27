@@ -703,6 +703,7 @@ bool Forca::validar_palpite(std::string &palpite){
 }
 
 //[NÃO FINALIZADO]
+  
 void Forca::print_hangman(){
     std::cout << std::endl << std::endl;
 	std::cout << "  -----" << std::endl;
@@ -849,7 +850,6 @@ void Forca::atualizar_tentativas(std::pair<bool, bool> tipo_palpite)
     }
 }
 
-//[NÃO FINALIZADO]
 void Forca::atualizar_pontos(std::pair<bool, bool> tipo_palpite, std::string ultimo_palpite)
 {
     std::string str = "_";
@@ -924,6 +924,19 @@ bool Forca::print_continuar_jogando()
     return false;
 }
 
+void Forca::print_acertou_todas_palavras(){
+  std::vector<std::string> dificuldades = {"Fácil", "Médio", "Difícil"};
+  
+  std::cout << "Um feito para poucos! Muito bem! Você acertou todas as palavras do nível"<< dificuldades[m_dificuldade] << "!" << std::endl;
+
+  if(m_dificuldade != Forca::DIFICIL)
+    std::cout << "Tente na dificuldade "<< dificuldades[m_dificuldade+1] << " da próxima vez! Vou ficar no aguardo! Até a próxima!" << std::endl;
+  else
+    std::cout << "Genial! Parabéns pela dedição, amor e esforço pela forca! Quem sabe um dia teremos um campeonato internacional de forca" << std::endl;
+    
+  std::cout << "Não deixe de conferir o \"Menu de Scores\" para conferir seu feito!" << std::endl;
+}
+  
 bool Forca::rodada_terminada()
 {
     // A rodada termina ou quando não existem mais tentativas ou quando o jogador vence
@@ -946,8 +959,23 @@ void Forca::print_filtradas()
 
 void Forca::reset_rodada()
 {
+  //Salva palavra acertada para carregar no arquivo de scores
+  m_palavras_acertadas.push_back(m_palavra_atual);
+  
+  //Tira a última palavra do vetor pq a palavra atual do jogo é definida como a     última
+  m_palavras_do_jogo.pop_back();
+
+  //Limpa os palpites da última tentativa
+  m_letras_palpitadas.clear();
+  
+  //Tentativas restantes padrão
+  m_tentativas_restantes = 6;
 }
 
+void Forca::registrar_score(){
+  
+}
+  
 std::string Forca::get_palavra_jogada()
 {
     return m_palavra_jogada;
@@ -956,4 +984,8 @@ std::string Forca::get_palavra_jogada()
 std::string Forca::get_palavra_atual()
 {
     return m_palavra_atual;
+}
+
+int Forca::get_palavra_atual_size(){
+  return (int) m_palavra_atual.size();
 }
