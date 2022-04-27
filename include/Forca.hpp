@@ -36,7 +36,7 @@ private:
     std::vector<char> m_letras_palpitadas;       //<! contem as letras palpitadas pelo jogador
     std::string m_palavra_atual;                 //<! palavra sendo jogada “atualmente”
     std::string m_palavra_jogada;                //<! palavra sendo jogada “atualmente” no formato “_ _ _ ... _ “
-
+    std::vector<std::string> m_palavras_acertadas;
     int m_tentativas_restantes; // TODO: armazenar tentativas restantes
     int m_frequencia_media;     // Armazenar a frequência média de palavras
     int m_pontos;     // Armazenar a frequência média de palavras
@@ -96,7 +96,7 @@ public:
     bool print_continuar_jogando();
 
     void print_hangman();
-
+    void print_acertou_todas_palavras();
     /////////////////////////////////////////////////////////////////////////
     /////////// Validação
     //////////////////////////////////////////////
@@ -163,15 +163,18 @@ public:
      * @param tipo_palpite baseado no modelo de retorno de palpite().
      */
     void atualizar_pontos(std::pair<bool, bool> tipo_palpite, std::string ultimo_palpite);
+
+    void registrar_score();
     
     /**
-     * Reseta o valor de tentativas restantes para 5 e do atributo m_letras_palpitadas para vazio
+     * Reseta o valor de tentativas restantes para 6 e do atributo m_letras_palpitadas para vazio
      * Este método é útil no caso do jogador escolher continuar o jogo, ou no início
-     * de cada rodada, resetando o valor de tentativas restantes para 5 e do atributo
+     * de cada rodada, resetando o valor de tentativas restantes para 6 e do atributo
      * m_letras_palpitadas como sendo um vetor vazio
      */
     void reset_rodada();
 
+    void reset_all();
 
     /////////////////////////////////////////////////////////////////////////
     /////////// Sorteio
@@ -225,6 +228,8 @@ public:
      * @return o valor do atributo palavra_atual
      **/
     std::string get_palavra_atual();
+
+    int get_palavra_atual_size();
 
         /**
      * Modifica a dificuldade do jogo.

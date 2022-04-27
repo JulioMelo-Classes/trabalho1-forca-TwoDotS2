@@ -632,7 +632,6 @@ std::pair<bool, bool> Forca::palpite(std::string palpite)
     } else
         tipo_palpite.second = false;
 
-    std::cout << "{ " << tipo_palpite.first << ", " << tipo_palpite.second << " }";
     return tipo_palpite;
 }
 
@@ -717,9 +716,10 @@ void Forca::print_hangman(){
 
 std::string Forca::print_forca_ui()
 {
+    std::cout << "--------------------------------------------------------------------" << std::endl;
     //[DEBUG]
     std::cout << "(Palavra atual: " << m_palavra_atual << " )" << std::endl;
-    std::cout << "{ ";
+    std::cout << "[ ";
     for (int ii = 0; ii < (int)m_letras_palpitadas.size(); ++ii)
     {
         if (ii == (int)m_letras_palpitadas.size())
@@ -727,7 +727,7 @@ std::string Forca::print_forca_ui()
         else
             std::cout << m_arquivo_palavras[ii] << ", ";
     }
-    std::cout << " }" << std::endl;
+    std::cout << " ]" << std::endl;
 
     std::string palpite;
     // Lacuna entre o título da página e os underscores da forca.
@@ -765,10 +765,11 @@ std::string Forca::print_forca_ui()
 
 std::string Forca::print_forca_ui(std::pair<bool, bool> palpite, std::string ultimo_palpite)
 {
+    std::cout << "--------------------------------------------------------------------" << std::endl;
     //[DEBUG]
     std::cout << "(Palavra atual: " << m_palavra_atual << " )" << std::endl;
 
-    std::cout << "{ ";
+    std::cout << "[ ";
     for (int ii = 0; ii < (int)m_letras_palpitadas.size(); ++ii)
     {
         if (ii == (int)m_letras_palpitadas.size())
@@ -776,7 +777,7 @@ std::string Forca::print_forca_ui(std::pair<bool, bool> palpite, std::string ult
         else
             std::cout << m_letras_palpitadas[ii] << ", ";
     }
-    std::cout << " }" << std::endl;
+    std::cout << " ]" << std::endl;
 
     std::string str;
     if (palpite.first == true)
@@ -850,7 +851,6 @@ void Forca::atualizar_tentativas(std::pair<bool, bool> tipo_palpite)
     }
 }
 
-//[NÃO FINALIZADO]
 void Forca::atualizar_pontos(std::pair<bool, bool> tipo_palpite, std::string ultimo_palpite)
 {
     std::string str = "_";
@@ -885,9 +885,6 @@ void Forca::atualizar_pontos(std::pair<bool, bool> tipo_palpite, std::string ult
     // {F,F} no caso do palpite não pertencer à palavra e não é novo.
     if (!tipo_palpite.first && !tipo_palpite.second)
         --m_pontos;
-
-    //[DEBUG]
-    std::cout << "Atualizar_Pontos: " << m_palavra_atual << " = " << m_palavra_jogada << std::endl; 
 }
 
 void Forca::print_game_over()
@@ -901,11 +898,14 @@ bool Forca::print_continuar_jogando()
     std::string op;
     bool b = true;
 
-    std::cout << "Você acertou! Parabéns! A palavra era " << m_palavra_atual << "!" << std::endl
+    std::cout << "Você acertou! Parabéns!" << std::endl
               << std::endl;
 
     std::cout << "--------------------------------------------------------------------" << std::endl << std::endl;
    
+    //Salva palavra acertada para carregar no arquivo de scores
+    m_palavras_acertadas.push_back(m_palavra_atual);
+
     while (b)
     {
         std::cout << "Deseja continuar jogando [S/N]: ";
@@ -925,6 +925,19 @@ bool Forca::print_continuar_jogando()
     return false;
 }
 
+void Forca::print_acertou_todas_palavras(){
+  std::vector<std::string> dificuldades = {"Fácil", "Médio", "Difícil"};
+  
+  std::cout << "Um feito para poucos! Muito bem! Você acertou todas as palavras do nível"<< dificuldades[m_dificuldade] << "!" << std::endl;
+
+  if(m_dificuldade != Forca::DIFICIL)
+    std::cout << "Tente na dificuldade "<< dificuldades[m_dificuldade+1] << " da próxima vez! Vou ficar no aguardo! Até a próxima!" << std::endl;
+  else
+    std::cout << "Genial! Parabéns pela dedição, amor e esforço pela forca! Quem sabe um dia teremos um campeonato internacional de forca" << std::endl;
+    
+  std::cout << "Não deixe de conferir o \"Menu de Scores\" para conferir seu feito!" << std::endl;
+}
+  
 bool Forca::rodada_terminada()
 {
     // A rodada termina ou quando não existem mais tentativas ou quando o jogador vence
@@ -946,9 +959,62 @@ void Forca::print_filtradas()
 }
 
 void Forca::reset_rodada()
-{
+{  
+  //Tira a última palavra do vetor pq a palavra atual do jogo é definida como a     última
+  m_palavras_do_jogo.pop_back();
+
+  //Limpa os palpites da última tentativa
+  m_letras_palpitadas.clear();
+
+  m_palavra_jogada = "";
+  
+  //Tentativas restantes padrão
+  m_tentativas_restantes = 6;
 }
 
+void Forca::reset_all(){
+    reset_rodada();
+    m_pontos = 0;
+}
+
+void Forca::registrar_score(){
+    std::vector<std::string> dificuldades = {"Facil", "Medio", "Dificil"};
+    //score_formatted: 'Dificuldade' ; 'Nome' ; ['Palavras'] ;
+    std::string score_formated, nome;
+
+    //Dificuldade
+    score_formated = dificuldades[m_dificuldade] + ";";
+    
+    //Nome
+    std::cout <<  "Qual nome quer colocar no \"Menu de Scores\"? ";
+    std::cin >> nome;
+    score_formated = score_formated + nome + ";";
+
+    std::cout << "--------------------------------------------------------------------" << std::endl;
+    
+    //Palavras acertadas
+    int ii = 0;
+    while(ii < (int) m_palavras_acertadas.size())
+    {
+        if(ii != (int) m_palavras_acertadas.size()-1)
+            score_formated.append(m_palavras_acertadas[ii] + ",");
+        else
+            score_formated.append(m_palavras_acertadas[ii]);
+            
+        ++ii;
+    }
+    score_formated.append(";");
+
+    //Pontos
+    score_formated = score_formated + std::to_string(m_pontos);
+
+    //Carregar para o arquivo de scores
+    std::ofstream ofs (m_arquivo_scores, std::ios::app);
+    ofs << score_formated;
+    ofs.close();
+
+}
+  
 std::string Forca::get_palavra_jogada()
 {
     return m_palavra_jogada;
@@ -957,4 +1023,8 @@ std::string Forca::get_palavra_jogada()
 std::string Forca::get_palavra_atual()
 {
     return m_palavra_atual;
+}
+
+int Forca::get_palavra_atual_size(){
+  return (int) m_palavra_atual.size();
 }
