@@ -563,7 +563,7 @@ int Forca::print_menu_informacoes()
     std::cin >> escolha;
 
     std::cout << std::endl
-              << "--------------------------------------------------------------------";
+              << "----------------------------------------------------------------------------------------------------------------------------------------";
     std::cout << std::endl
               << std::endl;
 
@@ -583,7 +583,7 @@ Forca::Dificuldade Forca::print_menu_dificuldades()
     std::cin >> escolha;
 
     std::cout << std::endl
-              << "--------------------------------------------------------------------";
+              << "----------------------------------------------------------------------------------------------------------------------------------------";
     std::cout << std::endl
               << std::endl;
 
@@ -713,9 +713,9 @@ void Forca::print_hangman(){
 
 std::string Forca::print_forca_ui()
 {
-    std::cout << "--------------------------------------------------------------------" << std::endl;
+    std::cout << "----------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
     //[TESTE]
-    //std::cout << "(Palavra atual: " << m_palavra_atual << " )" << std::endl;
+    std::cout << "(Palavra atual: " << m_palavra_atual << " )" << std::endl;
     std::cout << "[ ";
     for (int ii = 0; ii < (int)m_letras_palpitadas.size(); ++ii)
     {
@@ -762,9 +762,9 @@ std::string Forca::print_forca_ui()
 
 std::string Forca::print_forca_ui(std::pair<bool, bool> palpite, std::string ultimo_palpite)
 {
-    std::cout << "--------------------------------------------------------------------" << std::endl;
+    std::cout << "----------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
     //[TESTE]
-    //std::cout << "(Palavra atual: " << m_palavra_atual << " )" << std::endl;
+    std::cout << "(Palavra atual: " << m_palavra_atual << " )" << std::endl;
 
     std::cout << "[ ";
     for (int ii = 0; ii < (int)m_letras_palpitadas.size(); ++ii)
@@ -898,7 +898,7 @@ bool Forca::print_continuar_jogando()
     std::cout << "Você acertou! Parabéns!" << std::endl
               << std::endl;
 
-    std::cout << "--------------------------------------------------------------------" << std::endl << std::endl;
+    std::cout << "----------------------------------------------------------------------------------------------------------------------------------------" << std::endl << std::endl;
    
     //Salva palavra acertada para carregar no arquivo de scores
     m_palavras_acertadas.push_back(m_palavra_atual);
@@ -914,7 +914,7 @@ bool Forca::print_continuar_jogando()
     }
 
     std::cout << std::endl;
-    std::cout << "--------------------------------------------------------------------" << std::endl;
+    std::cout << "----------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
     
     if (op == "S")
         return true;
@@ -923,16 +923,18 @@ bool Forca::print_continuar_jogando()
 }
 
 void Forca::print_acertou_todas_palavras(){
-  std::vector<std::string> dificuldades = {"Fácil", "Médio", "Difícil"};
-  
-  std::cout << "Um feito para poucos! Muito bem! Você acertou todas as palavras do nível"<< dificuldades[m_dificuldade] << "!" << std::endl;
+    std::vector<std::string> dificuldades = {"Fácil", "Médio", "Difícil"};
 
-  if(m_dificuldade != Forca::DIFICIL)
-    std::cout << "Tente na dificuldade "<< dificuldades[m_dificuldade+1] << " da próxima vez! Vou ficar no aguardo! Até a próxima!" << std::endl;
-  else
-    std::cout << "Genial! Parabéns pela dedição, amor e esforço pela forca! Quem sabe um dia teremos um campeonato internacional de forca" << std::endl;
-    
-  std::cout << "Não deixe de conferir o \"Menu de Scores\" para conferir seu feito!" << std::endl;
+    std::cout << "Um feito para poucos! Muito bem! Você acertou todas as palavras do nível "<< dificuldades[m_dificuldade] << "!" << std::endl;
+
+    if(m_dificuldade != Forca::DIFICIL)
+    std::cout << "Tente na dificuldade "<< dificuldades[m_dificuldade+1] << " da próxima vez! Vou ficar no aguardo! Até a próxima!" << std::endl << std::endl;
+    else
+    std::cout << "Genial! Parabéns pela dedição, amor e esforço pela forca! Quem sabe um dia teremos um campeonato internacional de forca" << std::endl << std::endl;
+
+    std::cout << "(Não deixe de conferir o \"Menu de Scores\" para conferir seu feito!)" << std::endl;
+    std::cout << "----------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
+
 }
   
 bool Forca::rodada_terminada()
@@ -971,6 +973,7 @@ void Forca::reset_rodada()
 
 void Forca::reset_all(){
     reset_rodada();
+    m_palavras_acertadas.clear();
     m_pontos = 0;
 }
 
@@ -987,7 +990,7 @@ void Forca::registrar_score(){
     std::cin >> nome;
     score_formated = score_formated + nome + ";";
 
-    std::cout << "--------------------------------------------------------------------" << std::endl;
+    std::cout << "----------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
     
     //Palavras acertadas
     int ii = 0;
@@ -1006,7 +1009,8 @@ void Forca::registrar_score(){
     score_formated = score_formated + std::to_string(m_pontos);
 
     //Carregar para o arquivo de scores
-    std::ofstream ofs (m_arquivo_scores, std::ios::app);
+    std::ofstream ofs (m_arquivo_scores, std::ios_base::app);
+    ofs << "\n";
     ofs << score_formated;
     ofs.close();
 
@@ -1023,5 +1027,5 @@ std::string Forca::get_palavra_atual()
 }
 
 int Forca::get_palavra_atual_size(){
-  return (int) m_palavra_atual.size();
+  return (int) m_palavras_do_jogo.size();
 }

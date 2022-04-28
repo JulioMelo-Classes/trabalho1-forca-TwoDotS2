@@ -44,13 +44,16 @@ int main(int argc, char *argv[])
             //In game | Nível de Acesso 2.1
             while ( true )
             {
-                //define a palavra da rodada atual e a sua forma em underscores
-                forca.proxima_palavra();
                 if(forca.get_palavra_atual_size() == 0) 
                 {
-                  forca.print_acertou_todas_palavras();
-                  break;  
+                    forca.print_acertou_todas_palavras();
+                    forca.registrar_score();
+                    forca.reset_all();
+                    break;  
                 }
+
+                //define a palavra da rodada atual e a sua forma em underscores
+                forca.proxima_palavra();
               
                 //exibe interface do jogo
                 forca.dica_palavra_jogada(); 
