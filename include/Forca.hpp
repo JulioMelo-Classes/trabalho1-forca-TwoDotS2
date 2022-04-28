@@ -66,20 +66,25 @@ public:
     int print_menu_informacoes();
 
     /**
-     * Printa os scores registrados.
+     * Dado o arquivo de scores, printa os scores registrados.
      */
     void print_scores_registrados();
 
     /**
-     * Printa o menu das dificuldades do jogo da forca, caso o usuário
-     *  tenha selecionado a opção de iniciar o jogo.
+     * Printa o menu das dificuldades do jogo da forca, caso o usuário tenha selecionado a opção de iniciar o jogo. Lê a dificuldade
+     * escolhida pelo jogador.
+     * @return A dificuldade escolhida pelo jogador para definir a dificuldade do jogo a ser jogado.
      * (Dificuldades: 'Fácil', 'Médio' e 'Difícil)
      */
     Dificuldade print_menu_dificuldades();
 
     /**
      * Printa a user interface da forca baseada em m_palavra_jogada e m_palavra_atual. O método sobrecarregado tem como objetivo
-     * dar uma resposta difente, de acordo com o tipo do palpite, definido em palpite().
+     * registrar uma resposta mais completa de acordo com o último tipo do palpite retornado em palpite() dado pelo usuário. Chama
+     * validar_palpite() para verificar a validade.
+     * 
+     * @see palpite
+     * @see validar_palpite
      */
     std::string print_forca_ui();
     std::string print_forca_ui(std::pair<bool, bool> palpite, std::string ultimo_palpite);
@@ -91,12 +96,20 @@ public:
     void print_game_over();
 
     /**
-     * Caso o jogador ganhe a rodada, pergunta se quer continuando até o fim.
+     * Caso o jogador ganhe a rodada, pergunta se quer continuar jogando por mais uma rodada, até que ganhe a próxima, chamando
+     *  a função novamente ou perca no meio do jogo.
      */
     bool print_continuar_jogando();
 
+    /**
+     * Atualiza o estado da pessoa enforcada caso o número de tentativas diminua - m_tentativas_restante.
+     */
     void print_hangman();
     
+    /**
+     * Exibe um menu específico para caso o jogador acerte todas as palavras em determinada dificudade. Gera um retorno 
+     * diferente por difiucldade.
+     */
     void print_acertou_todas_palavras();
 
     /////////////////////////////////////////////////////////////////////////
@@ -116,6 +129,10 @@ public:
      */
 
     std::pair<bool, std::string> eh_valido();
+
+    /////////////////////////////////////////////////////////////////////////
+    /////////// Atualização de estados
+    //////////////////////////////////////////////
 
     /**
      * Retorna a próxima palavra de acordo com a dificuldade atual.
@@ -152,20 +169,28 @@ public:
     bool rodada_terminada();
 
     /**
-     * Atualizar quantas tentativas ainda são possíveis, alterando o valor de m_tentativas_restantes
+     * Atualiza quantas tentativas ainda são possíveis, dado o tipo de palpite ({T, T}, {T,F}, {F, F} ou {F,T}), 
+     * realizando a alteração do valor de m_tentativas_restantes.
      * 
      * @param tipo_palpite baseado no modelo de retorno de palpite().
+     * @see palpite
      */
     void atualizar_tentativas( std::pair<bool, bool> tipo_palpite);
 
 
     /**
-     * Atualizar os pontos baseado no tipo de palpite ({T, T}, ... {F, F}), alternado o valor de m_pontos
+     * Atualizar os pontos baseado no tipo de palpite ({T, T}, {T,F}, {F, F} ou {F,T}), alternado o valor de m_pontos
      * 
      * @param tipo_palpite baseado no modelo de retorno de palpite().
+     * @see palpite
      */
     void atualizar_pontos(std::pair<bool, bool> tipo_palpite, std::string ultimo_palpite);
 
+    
+    /**
+     * Caso o jogador perca ou acerte a palavra da rodada e decida sair, pede ao usuário que escolha um nome e registra o score
+     * em m_arquivo_scores.
+     */
     void registrar_score();
     
     /**
@@ -176,6 +201,9 @@ public:
      */
     void reset_rodada();
 
+    /**
+     * Chama a função reset_rodada, mas também faz o reset de m_pontos e m_palavras_acertadas
+     */
     void reset_all();
 
     /////////////////////////////////////////////////////////////////////////
@@ -183,30 +211,37 @@ public:
     //////////////////////////////////////////////
 
     /**
-     * Definir o valor médio da frequência das palavras.
+     * Definir o valor médio da frequência das palavras. Soma todas as frequências de m_palavras e realiza uma média aritimética,
+     * atribuindo valor à m_frequencia_media.
      *
      */
     void calcular_frequencia_media();
 
     /**
-     * Define as palavras de do container de "Palavaras do Jogo" (m_palavras_do_jogo), ordenando aleatoriamente o vetor m_palavras
-     */
+     * Define as palavras do container de "Palavaras do Jogo" (m_palavras_do_jogo). A aletoriedade vem da ordenação de
+     * do vetor m_palavras através do método std::random_shuffle() e de um número aleatório baseado no retorno de shuffle e rand.
+     * 
+     * @see http://www.cplusplus.com/reference/algorithm/random_shuffle/
+     * */
     void sortear_palavras();
 
     /**
-     * Essa função serve para gerar os valores previstos por 3b) iii. e 3c) iii. 
+     * Essa função serve para gerar os valores previstos por 3b) iii. e 3c) iii.
+     * O nome dica vem do propósito da função, que é o de auxiliar o jogador nas primeira rodada exibindo algumas das letras da
+     * m_palavra atual. Varia de acordo com a dificuldade. 
      */
     void dica_palavra_jogada();
 
     /**
-     * Função para auxiliar no debug manual do sorteio das palavras de m_palavras_do_jogo por sortear_palavras()
+     * Função para auxiliar no teste manual do sorteio das palavras de m_palavras_do_jogo geradas por sortear_palavras()
+     * @see sortear_palavras
      */
     void print_filtradas();
 
     /////////////////////////////////////////////////////////////////////////
     /////////// Getters e Setters
     //////////////////////////////////////////////
-    
+    //[NÃO UTILIZADA]
     /**
      * Retorna a quantidade de tentativas restantes.
      * @return a quantidade de tentativas restantes.
@@ -231,9 +266,16 @@ public:
      **/
     std::string get_palavra_atual();
 
-    int get_palavra_atual_size();
 
-        /**
+    /**
+     * Verifica se ainda existem palavras em m_palavras_do_jogo. Essa função é muito importante para o sistema, uma vez
+     * que a lógica de troca da palavra_atual é a remoção do última palavra de m_palavras_do_jogo
+     * @return F, caso o tamanho m_palavras_do_jogo é igual a zero,
+     *         T, caso contrário.
+     */
+    bool restam_palavras();
+
+    /**
      * Modifica a dificuldade do jogo.
      * Este método modifica a dificuldade do jogo gerando um novo vetor palavras_do_jogo
      * toda vez que é chamado.
@@ -266,8 +308,18 @@ private:
      */
     void inserir_filtradas_dificil(int qtd_filtradas);
 
-    void set_palavra_atual(std::string palavra_atual);
+    void set_palavra_atual(std::string p);
+    /**
+     * Escrever a m_palavra_jogada no formato _ _ _ ... _. É um método privado porque sempre que m_palavra_atual for definida
+     * por proxima_palavra(), é direta a necessidade de definir m_palavra_jogada.
+     */
     void set_palavra_jogada();
 
-    bool validar_palpite(std::string &palpite);
+    /**
+     * Valida o palpite verificando se está entre o intervalo A e Z é válido.
+     * 
+     * @return T, caso seja válido.
+     *         F, caso tenha mais de um caracter ou está fora do intervalo.
+     */
+    bool validar_palpite(std::string palpite);
 };

@@ -419,7 +419,6 @@ void Forca::sortear_palavras()
 
     std::srand(unsigned(std::time(0)));
     std::random_shuffle(m_palavras.begin(), m_palavras.end(), myrandom);
-    // Estudar: http://www.cplusplus.com/reference/algorithm/random_shuffle/
 
     //<! divisão dos filtros por dificuldade
     if (m_dificuldade == Forca::FACIL)
@@ -690,7 +689,7 @@ void Forca::dica_palavra_jogada()
 }
 
 //Retorna se o palpite é válido
-bool Forca::validar_palpite(std::string &palpite){
+bool Forca::validar_palpite(std::string palpite){
     
     if(palpite.size() != 1) return false;
     if( (palpite[0] < 'A' || palpite[0] > 'Z') ) return false;
@@ -775,7 +774,6 @@ std::string Forca::print_forca_ui(std::pair<bool, bool> palpite, std::string ult
     }
     std::cout << " ]" << std::endl << std::endl;
 
-    std::string str;
     if (palpite.first == true)
     {
         if (palpite.second == true)
@@ -815,6 +813,7 @@ std::string Forca::print_forca_ui(std::pair<bool, bool> palpite, std::string ult
     }
     std::cout << std::endl;
 
+    std::string str;
     std::cout << "Pontos: " << m_pontos << std::endl;
     std::cout << "Palpite: ";
     std::cin >> str;
@@ -1019,6 +1018,7 @@ std::string Forca::get_palavra_atual()
     return m_palavra_atual;
 }
 
-int Forca::get_palavra_atual_size(){
-  return (int) m_palavras_do_jogo.size();
+bool Forca::restam_palavras(){
+    if( (int) m_palavras_do_jogo.size() == 0) return false;
+    return true;
 }
