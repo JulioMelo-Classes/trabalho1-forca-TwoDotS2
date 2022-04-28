@@ -4,3 +4,4 @@ Dificil;Isaac;;-4
 Medio;Ramon;PROFESSOR,CASA,DISCORD;60
 Medio;Jessica;COMER,DORMIR,ESTUDAR;60
 Facil;Ana;COBRA,COELHO,JANTAR;10
+Médio; Julio; ; -3
