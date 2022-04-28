@@ -563,7 +563,7 @@ int Forca::print_menu_informacoes()
     std::cin >> escolha;
 
     std::cout << std::endl
-              << "----------------------------------------------------------------------------------------------------------------------------------------";
+              << "------------------------------------------------------------------------------------------";
     std::cout << std::endl
               << std::endl;
 
@@ -583,7 +583,7 @@ Forca::Dificuldade Forca::print_menu_dificuldades()
     std::cin >> escolha;
 
     std::cout << std::endl
-              << "----------------------------------------------------------------------------------------------------------------------------------------";
+              << "------------------------------------------------------------------------------------------";
     std::cout << std::endl
               << std::endl;
 
@@ -701,21 +701,24 @@ bool Forca::validar_palpite(std::string &palpite){
 //[NÃO FINALIZADO]
 //<! Referência: https://github.com/AngularsCoding/Hangman/blob/main/Hangman.cpp
 void Forca::print_hangman(){
-    std::cout << std::endl << std::endl;
+    std::cout << std::endl;
+    std::cout << "Resta(m) " << m_tentativas_restantes << " tentativa(s)" << std::endl; 
+    std::cout << std::endl;
 	std::cout << "  -----" << std::endl;
 	std::cout << "  |   |" << std::endl; 
-	std::cout << "  |";    if(m_tentativas_restantes>=1) std::cout<<"   O    "; std::cout<<std::endl;
-	std::cout << "  |";    if(m_tentativas_restantes>=3) std::cout<<"  /|\\   "; std::cout<<std::endl;
-	std::cout << "  |";    if(m_tentativas_restantes>=5) std::cout<<"  / \\    "; std::cout<<std::endl;
-	std::cout << "  |"   <<std::endl; 
-	std::cout << "__|__" <<std::endl;
+	std::cout << "  |";    if(m_tentativas_restantes<=5) std::cout<<"   O    "; std::cout<<std::endl;
+	std::cout << "  |";    if(m_tentativas_restantes<=2) std::cout<<"  /|\\   "; std::cout<<std::endl;
+	std::cout << "  |";    if(m_tentativas_restantes<=1) std::cout<<"  / \\    "; std::cout<<std::endl;
+	std::cout << "  |"   << std::endl; 
+	std::cout << "__|__" << std::endl << std::endl;;
 }
 
 std::string Forca::print_forca_ui()
 {
-    std::cout << "----------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
+    std::cout << "------------------------------------------------------------------------------------------" << std::endl;
     //[TESTE]
-    std::cout << "(Palavra atual: " << m_palavra_atual << " )" << std::endl;
+    //std::cout << "(Palavra atual: " << m_palavra_atual << " )" << std::endl;
+    std::cout << "Lista de Palpites: " << std::endl;
     std::cout << "[ ";
     for (int ii = 0; ii < (int)m_letras_palpitadas.size(); ++ii)
     {
@@ -724,14 +727,11 @@ std::string Forca::print_forca_ui()
         else
             std::cout << m_arquivo_palavras[ii] << ", ";
     }
-    std::cout << " ]" << std::endl;
+    std::cout << " ]" << std::endl << std::endl;
 
     std::string palpite;
-    // Lacuna entre o título da página e os underscores da forca.
-    std::cout << std::endl
-              << std::endl
-              << std::endl
-              << std::endl;
+    
+    print_hangman();
 
     for (int ii = 0; ii < (int)m_palavra_jogada.size(); ++ii)
     {
@@ -755,16 +755,15 @@ std::string Forca::print_forca_ui()
         std::cin >> palpite; 
     }
 
-    std::cout << std::endl << std::endl;
-
     return palpite;
 }
 
 std::string Forca::print_forca_ui(std::pair<bool, bool> palpite, std::string ultimo_palpite)
 {
-    std::cout << "----------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
+    std::cout << "------------------------------------------------------------------------------------------" << std::endl;
     //[TESTE]
-    std::cout << "(Palavra atual: " << m_palavra_atual << " )" << std::endl;
+    //std::cout << "(Palavra atual: " << m_palavra_atual << " )" << std::endl;
+    std::cout << "Lista de Palpites: " << std::endl;
 
     std::cout << "[ ";
     for (int ii = 0; ii < (int)m_letras_palpitadas.size(); ++ii)
@@ -774,7 +773,7 @@ std::string Forca::print_forca_ui(std::pair<bool, bool> palpite, std::string ult
         else
             std::cout << m_letras_palpitadas[ii] << ", ";
     }
-    std::cout << " ]" << std::endl;
+    std::cout << " ]" << std::endl << std::endl;
 
     std::string str;
     if (palpite.first == true)
@@ -804,14 +803,8 @@ std::string Forca::print_forca_ui(std::pair<bool, bool> palpite, std::string ult
         }
     }
 
-    // Lacuna entre o título da página e os underscores da forca.
+    print_hangman();
 
-    // Lógica do boneco;
-
-    std::cout << std::endl
-              << std::endl
-              << std::endl
-              << std::endl;
 
     for (int ii = 0; ii < (int)m_palavra_jogada.size(); ++ii)
     {
@@ -833,8 +826,6 @@ std::string Forca::print_forca_ui(std::pair<bool, bool> palpite, std::string ult
         std::cout << "Palpite: ";
         std::cin >> str; 
     }
-
-    std::cout << std::endl << std::endl;
 
     return str;
 }
@@ -894,11 +885,13 @@ bool Forca::print_continuar_jogando()
 {
     std::string op;
     bool b = true;
+    
+    std::cout << "------------------------------------------------------------------------------------------" << std::endl;
 
-    std::cout << "Você acertou! Parabéns!" << std::endl
+    std::cout << "Você acertou! Parabéns! A palavra era " << m_palavra_atual << "!" << std::endl
               << std::endl;
 
-    std::cout << "----------------------------------------------------------------------------------------------------------------------------------------" << std::endl << std::endl;
+    std::cout << "------------------------------------------------------------------------------------------" << std::endl << std::endl;
    
     //Salva palavra acertada para carregar no arquivo de scores
     m_palavras_acertadas.push_back(m_palavra_atual);
@@ -914,7 +907,7 @@ bool Forca::print_continuar_jogando()
     }
 
     std::cout << std::endl;
-    std::cout << "----------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
+    std::cout << "------------------------------------------------------------------------------------------" << std::endl;
     
     if (op == "S")
         return true;
@@ -933,7 +926,7 @@ void Forca::print_acertou_todas_palavras(){
     std::cout << "Genial! Parabéns pela dedição, amor e esforço pela forca! Quem sabe um dia teremos um campeonato internacional de forca" << std::endl << std::endl;
 
     std::cout << "(Não deixe de conferir o \"Menu de Scores\" para conferir seu feito!)" << std::endl;
-    std::cout << "----------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
+    std::cout << "------------------------------------------------------------------------------------------" << std::endl;
 
 }
   
@@ -990,7 +983,7 @@ void Forca::registrar_score(){
     std::cin >> nome;
     score_formated = score_formated + nome + ";";
 
-    std::cout << "----------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
+    std::cout << "------------------------------------------------------------------------------------------" << std::endl;
     
     //Palavras acertadas
     int ii = 0;

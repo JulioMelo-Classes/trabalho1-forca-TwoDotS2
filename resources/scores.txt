@@ -11,3 +11,6 @@ Facil;Afonso;SEGUNDO;7
 Dificil;Afonso;UTILIZADOS;12
 Facil;Teste;SABER;6
 Dificil;Teste;PROCESSOS;11
+Facil;Afonso;;-4
+Facil;Afonso;;-1
+Facil;Afonso;FUTURO;4
