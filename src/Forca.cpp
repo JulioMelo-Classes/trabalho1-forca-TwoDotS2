@@ -982,7 +982,10 @@ void Forca::registrar_score(){
     
     //Nome
     std::cout <<  "Qual nome quer colocar no \"Menu de Scores\"? ";
-    std::cin >> nome;
+    
+  //Aceitar nome composto
+    std::cin.ignore();
+    std::getline(std::cin, nome);
     
     score_formated = score_formated + nome + ";";
 
