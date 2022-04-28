@@ -700,14 +700,13 @@ bool Forca::validar_palpite(std::string palpite){
 //[NÃO FINALIZADO]
 //<! Referência: https://github.com/AngularsCoding/Hangman/blob/main/Hangman.cpp
 void Forca::print_hangman(){
-    std::cout << std::endl;
     std::cout << "Resta(m) " << m_tentativas_restantes << " tentativa(s)" << std::endl; 
     std::cout << std::endl;
 	std::cout << "  -----" << std::endl;
 	std::cout << "  |   |" << std::endl; 
-	std::cout << "  |";    if(m_tentativas_restantes<=5) std::cout<<"   O    "; std::cout<<std::endl;
-	std::cout << "  |";    if(m_tentativas_restantes<=2) std::cout<<"  /|\\   "; std::cout<<std::endl;
-	std::cout << "  |";    if(m_tentativas_restantes<=1) std::cout<<"  / \\    "; std::cout<<std::endl;
+	std::cout << "  |";    if(m_tentativas_restantes<=5) std::cout<<"   O"; std::cout<<std::endl;
+	std::cout << "  |";    if(m_tentativas_restantes<=4) std::cout<<"  /"; if(m_tentativas_restantes<=3) std::cout<<"|"; if(m_tentativas_restantes<=2) std::cout<<"\\"; std::cout<<std::endl;
+	std::cout << "  |";    if(m_tentativas_restantes<=1) std::cout<<"  / "; if(m_tentativas_restantes<=0) std::cout<<"\\"; std::cout<<std::endl;
 	std::cout << "  |"   << std::endl; 
 	std::cout << "__|__" << std::endl << std::endl;;
 }
@@ -876,8 +875,11 @@ void Forca::atualizar_pontos(std::pair<bool, bool> tipo_palpite, std::string ult
 
 void Forca::print_game_over()
 {
-    std::cout << "Pontos: " << m_pontos << std::endl;
+   std::cout << "------------------------------------------------------------------------------------------" << std::endl;
     std::cout << "O jogo acabou, a palavra era " << m_palavra_atual << "!" << std::endl;
+    print_hangman();
+    std::cout << "Pontos: " << m_pontos << std::endl;
+    std::cout << "Mais sorte na próxima! " << std::endl;
 }
 
 bool Forca::print_continuar_jogando()
@@ -970,6 +972,7 @@ void Forca::reset_all(){
 }
 
 void Forca::registrar_score(){
+  //Falta filtrar e formatar as entrada de nome de usuário com acento
     std::vector<std::string> dificuldades = {"Facil", "Medio", "Dificil"};
     //score_formatted: 'Dificuldade' ; 'Nome' ; ['Palavras'] ;
     std::string score_formated, nome;
@@ -980,6 +983,7 @@ void Forca::registrar_score(){
     //Nome
     std::cout <<  "Qual nome quer colocar no \"Menu de Scores\"? ";
     std::cin >> nome;
+    
     score_formated = score_formated + nome + ";";
 
     std::cout << "------------------------------------------------------------------------------------------" << std::endl;

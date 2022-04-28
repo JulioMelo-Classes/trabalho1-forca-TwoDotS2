@@ -14,3 +14,5 @@ Dificil;Teste;PROCESSOS;11
 Facil;Afonso;;-4
 Facil;Afonso;;-1
 Facil;Afonso;FUTURO;4
+Facil;TESTE;;-6
+Facil;Oi;;-6

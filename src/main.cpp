@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
             // In game | Nível de Acesso 2.1
             while (true)
             {
-                if (forca.restam_palavras())
+                if (!forca.restam_palavras())
                 {
                     forca.print_acertou_todas_palavras();
                     forca.registrar_score();
@@ -96,6 +96,7 @@ int main(int argc, char *argv[])
                 { // perdeu
                     forca.print_game_over();
                     forca.registrar_score();
+                    forca.reset_all();
                     break;
                 }
             }
