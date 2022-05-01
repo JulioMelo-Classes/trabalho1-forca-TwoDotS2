@@ -16,3 +16,6 @@ Facil;Afonso;;-1
 Facil;Afonso;FUTURO;4
 Facil;TESTE;;-6
 Facil;Oi;;-6
+Facil;ana;;-1
+Facil;teste;;0
+Facil;teste;PALAVRA COMPOSTA;15

@@ -1,3 +1,5 @@
+#include <iostream>
+
 /**
  * Tags:
  *      [NÃO FINALIZADO], [DEBUG], [TESTE]
@@ -28,11 +30,10 @@ void Forca::set_palavra_atual(std::string p)
 
 void Forca::set_palavra_jogada()
 {
-    int ii = 0;
-    while (ii < m_palavra_atual.length())
+    for (int i = 0; i < m_palavra_atual.length(); i++)
     {
-        m_palavra_jogada.push_back('_');
-        ++ii;
+        if (m_palavra_atual[i] == ' ') m_palavra_jogada.push_back(' ');
+        else m_palavra_jogada.push_back('_');
     }
 }
 
@@ -51,13 +52,16 @@ std::pair<bool, std::string> Forca::eh_valido()
                                             "Nenhum arquivo de palavras foi encontrado em: " + m_arquivo_palavras);
     }
     // Lendo arquivo
-    std::string palavra;
-    std::string frequencia_string;
+    std::string line;
     // Contador de linhas do arquivo
     int i = 1;
 
-    while (fin >> palavra)
+    while (std::getline(fin, line))
     {
+        std::istringstream linha(line);
+      
+        std::string palavra;
+        std::getline(linha, palavra, '\t');
         // Se os caracteres da palavra não estiverem entre [A-Z], ou não forem ' ' ou
         // '-'. é enviada uma mensagem de erro
         for (char &ch : palavra)
@@ -69,7 +73,7 @@ std::pair<bool, std::string> Forca::eh_valido()
                                                                " (linha " + std::to_string(i) + ")");
             }
         }
-
+        
         // Utilizando stoi() para transformar uma string em um inteiro
         // int frequencia = stoi(frequencia_string);
 
@@ -80,7 +84,10 @@ std::pair<bool, std::string> Forca::eh_valido()
             return std::pair<bool, std::string>(false, "Palavra com tamanho menor ou igual a 4: " + palavra +
                                                            " (linha " + std::to_string(i) + ")");
         }
-        if (fin >> frequencia_string)
+      
+        std::string frequencia_string;
+        std::getline(linha, frequencia_string);
+        if (frequencia_string.size() != 0)
         {
             // Para cada caractere da frequencia, se ela não estiver entre [0-9], é enviada uma mensagem de erro
             for (char &ch : frequencia_string)
@@ -117,8 +124,7 @@ std::pair<bool, std::string> Forca::eh_valido()
 
     // resetando o contador
     i = 1;
-    // Lendo as linhas do arquivo
-    std::string line;
+    // Lendo as linhas do arquivo reutilizando a variável "line"
     while (std::getline(fin, line))
     {
         // contador de ponto e virgula
@@ -361,15 +367,20 @@ void Forca::carregar_arquivos()
     std::ifstream fin;
     fin.open(m_arquivo_palavras);
 
-    // std::string line;
-    std::string palavra;
-    int frequencia;
-
-    while (fin >> palavra >> frequencia)
+    std::string line;
+    while (std::getline(fin, line))
     {
+        std::istringstream linha(line);
+      
+        std::string palavra;
+        std::getline(linha, palavra, '\t');
         std::string upper = palavra;
         // transformando a palavra para caixa alta e salvando em "upper"
         transform(palavra.begin(), palavra.end(), upper.begin(), ::toupper);
+
+        std::string frequencia_str;
+        std::getline(linha, frequencia_str);
+        int frequencia = stoi(frequencia_str);
 
         // adicionando o par de palavra e frequencia no fim do vetor m_palavras
         m_palavras.push_back(std::pair<std::string, int>(upper, frequencia));
@@ -692,7 +703,7 @@ void Forca::dica_palavra_jogada()
 bool Forca::validar_palpite(std::string palpite){
     
     if(palpite.size() != 1) return false;
-    if( (palpite[0] < 'A' || palpite[0] > 'Z') ) return false;
+    if( (palpite[0] < 'A' || palpite[0] > 'Z') && palpite[0] != '-' ) return false;
 
     return true;
 }
