@@ -33,6 +33,7 @@ void Forca::set_palavra_jogada()
     for (int i = 0; i < m_palavra_atual.length(); i++)
     {
         if (m_palavra_atual[i] == ' ') m_palavra_jogada.push_back(' ');
+        else if (m_palavra_atual[i] == '-') m_palavra_jogada.push_back('-');
         else m_palavra_jogada.push_back('_');
     }
 }
@@ -703,7 +704,7 @@ void Forca::dica_palavra_jogada()
 bool Forca::validar_palpite(std::string palpite){
     
     if(palpite.size() != 1) return false;
-    if( (palpite[0] < 'A' || palpite[0] > 'Z') && palpite[0] != '-' ) return false;
+    if( (palpite[0] < 'A' || palpite[0] > 'Z')) return false;
 
     return true;
 }
@@ -731,7 +732,7 @@ std::string Forca::print_forca_ui()
     std::cout << "[ ";
     for (int ii = 0; ii < (int)m_letras_palpitadas.size(); ++ii)
     {
-        if (ii == (int)m_letras_palpitadas.size())
+        if (ii == (int)m_letras_palpitadas.size() - 1)
             std::cout << m_arquivo_palavras[ii];
         else
             std::cout << m_arquivo_palavras[ii] << ", ";
