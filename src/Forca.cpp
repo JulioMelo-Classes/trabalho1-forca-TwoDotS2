@@ -461,10 +461,11 @@ void Forca::inserir_filtradas_facil(int qtd_filtradas)
         {
             it = std::find(m_palavras_do_jogo.begin(), m_palavras_do_jogo.end(), m_palavras[i].first);
 
-            /** Pesquisar: it - m_palavras_do_jogo.begin() > 0
-             *  https://www.geeksforgeeks.org/std-find-in-cpp/
+            /** A função std::find() busca um valor no vetor e retorna um iterator para a determinada
+             * posição, caso encontre-o. Do contrário, ou seja, a palavra não existir no vetor std::find
+             * retorna vector<>.end().
              */
-            if ((int)m_palavras_do_jogo.size() == 0 || it - m_palavras_do_jogo.begin() > 0)
+            if ((int)m_palavras_do_jogo.size() == 0 || it == m_palavras_do_jogo.end())
             {
                 m_palavras_do_jogo.push_back(m_palavras[i].first);
             }
@@ -492,7 +493,7 @@ void Forca::inserir_filtradas_medio(int qtd_filtradas)
             {
                 //<! Caso std::find retorne o iterador do fim, significa que não há ocorrência.
                 //<! Caso contrário, a palavra já existe entre as palavras do jogo
-                if ((int)m_palavras_do_jogo.size() == 0 || it - m_palavras_do_jogo.begin() > 0)
+                if ((int)m_palavras_do_jogo.size() == 0 || it == m_palavras_do_jogo.end())
                 {
                     m_palavras_do_jogo.push_back(m_palavras[i].first);
                 }
@@ -513,7 +514,7 @@ void Forca::inserir_filtradas_medio(int qtd_filtradas)
         {
             //<! Caso std::find retorne o iterador do fim, significa que não há ocorrência.
             //<! Caso contrário, a palavra já existe entre as palavras do jogo
-            if ((int)m_palavras_do_jogo.size() == 0 || it - m_palavras_do_jogo.begin() > 0)
+            if ((int)m_palavras_do_jogo.size() == 0 || it == m_palavras_do_jogo.end())
             {
                 m_palavras_do_jogo.push_back(m_palavras[i].first);
             }
@@ -537,7 +538,7 @@ void Forca::inserir_filtradas_dificil(int qtd_filtradas)
         {
             if (m_palavras[i].second < m_frequencia_media)
             {
-                if ((int)m_palavras_do_jogo.size() == 0 || it - m_palavras_do_jogo.begin() > 0)
+                if ((int)m_palavras_do_jogo.size() == 0 || it == m_palavras_do_jogo.end())
                 {
                     m_palavras_do_jogo.push_back(m_palavras[i].first);
                 }
@@ -553,7 +554,7 @@ void Forca::inserir_filtradas_dificil(int qtd_filtradas)
         if (m_palavras[i].second > m_frequencia_media)
         {
             //<! Caso std::find retorne o iterador do fim, significa que não há ocorrência
-            if (((int)m_palavras_do_jogo.size() == 0 || it - m_palavras_do_jogo.begin() > 0) && (int)m_palavras_do_jogo.size() != qtd_filtradas)
+            if (((int)m_palavras_do_jogo.size() == 0 || it == m_palavras_do_jogo.end()) && (int)m_palavras_do_jogo.size() != qtd_filtradas)
             {
                 m_palavras_do_jogo.push_back(m_palavras[i].first);
             }
