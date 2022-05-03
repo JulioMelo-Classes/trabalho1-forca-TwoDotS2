@@ -1,10 +1,12 @@
-#include "../include/Forca.hpp"
+#include "../include/ForcaMenus.hpp"
 #include <iostream>
 
 using namespace std;
 int main(int argc, char *argv[])
 {
     Forca forca(argv[1], argv[2]);
+    ForcaMenus menus(&forca);
+    
     int op_principal;
 
     auto valid = forca.eh_valido();
@@ -28,12 +30,12 @@ int main(int argc, char *argv[])
     while (true)
     {
         // imprime o menu principal e a escolha do usuário
-        op_principal = forca.print_menu_informacoes(); //<! Qualquer opção diferente ou de 1 ou de 2 resulta
+        op_principal = menus.print_menu_informacoes(); //<! Qualquer opção diferente ou de 1 ou de 2 resulta
 
         // Lounge "Dificuldades" | Nível de Acesso 1
         if (op_principal == 1)
         {
-            Forca::Dificuldade d = forca.print_menu_dificuldades();
+            Forca::Dificuldade d = menus.print_menu_dificuldades();
             forca.set_dificuldade(d);
 
             // Sorteia as palavras
@@ -44,7 +46,7 @@ int main(int argc, char *argv[])
             {
                 if (!forca.restam_palavras())
                 {
-                    forca.print_acertou_todas_palavras();
+                    menus.print_acertou_todas_palavras();
                     forca.registrar_score();
                     forca.reset_all();
                     break;
@@ -56,7 +58,7 @@ int main(int argc, char *argv[])
                 // exibe interface do jogo
                 forca.dica_palavra_jogada();
 
-                string palpite = forca.print_forca_ui();
+                string palpite = menus.print_forca_ui();
 
                 while (!forca.rodada_terminada())
                 { // loop da rodada
@@ -69,7 +71,7 @@ int main(int argc, char *argv[])
                     if (forca.rodada_terminada())
                         break;
 
-                    palpite = forca.print_forca_ui(result, palpite);
+                    palpite = menus.print_forca_ui(result, palpite);
                 }
 
                 if (forca.get_palavra_atual() == forca.get_palavra_jogada())
@@ -77,7 +79,7 @@ int main(int argc, char *argv[])
                     // Lounge vitória da rodada | Nível de Acesso 3
                     // Pergunta se quer continuar jogando
 
-                    bool op = forca.print_continuar_jogando();
+                    bool op = menus.print_continuar_jogando();
                     if (op)
                     {
                         // Caso o usuário decida jogar mais uma rodada
@@ -94,7 +96,7 @@ int main(int argc, char *argv[])
                 }
                 else
                 { // perdeu
-                    forca.print_game_over();
+                    menus.print_game_over();
                     forca.registrar_score();
                     forca.reset_all();
                     break;
@@ -106,7 +108,7 @@ int main(int argc, char *argv[])
         // Lounge scores de jogatinas anteriores| Nível de Acesso 2.2
         else if (op_principal == 2)
         {
-            forca.print_scores_registrados();
+            menus.print_scores_registrados();
             std::cout << std::endl;
         }
 

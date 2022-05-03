@@ -1,5 +1,4 @@
 bin/
-build/
 .vscode/
 .ccls-cache/
 .replit

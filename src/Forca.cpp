@@ -11,8 +11,6 @@ Forca::Forca(std::string __palavras, std::string __scores)
     m_pontos = 0;
 }
 
-//Poderia ser divido em mais de uma função?
-//Teria necessidade?
 std::pair<bool, std::string> Forca::eh_valido()
 {
     // Procurar o arquivo para saber se ele existe
@@ -575,7 +573,13 @@ void Forca::registrar_score(){
     ofs.close();
 
 }
+
+bool Forca::restam_palavras(){
+    if( (int) m_palavras_do_jogo.size() == 0) return false;
+    return true;
+}
   
+
 std::string Forca::get_palavra_jogada()
 {
     return m_palavra_jogada;
@@ -586,9 +590,24 @@ std::string Forca::get_palavra_atual()
     return m_palavra_atual;
 }
 
-bool Forca::restam_palavras(){
-    if( (int) m_palavras_do_jogo.size() == 0) return false;
-    return true;
+std::string Forca::get_arquivo_scores(){
+    return m_arquivo_scores;
+}
+
+int Forca::get_tentativas_restantes(){
+    return m_tentativas_restantes;
+}
+
+std::vector<char> Forca::get_letras_palpitadas(){
+    return m_letras_palpitadas;
+}
+
+int Forca::get_pontos(){
+    return m_pontos;
+}
+
+Forca::Dificuldade Forca::get_dificuldade(){
+    return m_dificuldade;
 }
 
 void Forca::set_dificuldade(Forca::Dificuldade d)
@@ -600,6 +619,10 @@ void Forca::set_palavra_atual(std::string p)
 {
     m_palavra_atual = p;
     set_palavra_jogada();
+}
+
+void Forca::set_palavras_acertadas(std::string palavra){
+    m_palavras_acertadas.push_back(palavra);
 }
 
 void Forca::set_palavra_jogada()

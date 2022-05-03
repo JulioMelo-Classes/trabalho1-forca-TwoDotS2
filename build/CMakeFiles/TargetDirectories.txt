@@ -1,0 +1,3 @@
+/home/afonso/Documents/BTI_2022.1/LP1/trabalho1-forca-TwoDotS2/build/CMakeFiles/rebuild_cache.dir
+/home/afonso/Documents/BTI_2022.1/LP1/trabalho1-forca-TwoDotS2/build/CMakeFiles/edit_cache.dir
+/home/afonso/Documents/BTI_2022.1/LP1/trabalho1-forca-TwoDotS2/build/CMakeFiles/forca.dir

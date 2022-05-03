@@ -7,10 +7,19 @@ Repositório contendo as especificações do Trabalho 1 da disciplina de LP1
 Leia o documento de especificação contido em [Especificação do Trabalho 1](https://docs.google.com/document/d/1aa51VNLQ_jpZaEuGkMz2KE8feAkE48-TENZ9eqn48nk/edit?usp=sharing). Preencha o autor.md com as informações relativas ao grupo/autor.
 
 # 1. Como compilar e executar o projeto:
+**Compilando o programa**
 
-- Compilar pra arquivos ".o": g++ -c src/main.cpp src/Forca.cpp
-- Juntar os arquivos ".o" num executável: g++ -o forca main.o Forca.o
-- Executar o executável passando os arquivos como argumento: ./forca ./resources/words_2000.txt ./resources/scores.txt
+```
+mkdir build
+cd build
+cmake ..
+cmake --build .
+```
+**Executando o programa**
+
+```
+./forca ../resources/words_2000.txt ../resources/scores.txt
+```
 
 # 2. Testes e saídas esperadas
 
@@ -20,17 +29,17 @@ Leia o documento de especificação contido em [Especificação do Trabalho 1](h
 
 - Execução:
 
-`./forca ./resources/words.txt ./resources/scores.txt `
+`./forca ../resources/words.txt ../resources/scores.txt `
 
 - Saída esperada:
 
-`>>> Erro! Nenhum arquivo de palavras foi encontrado em: ./resources/words.txt`
+`>>> Erro! Nenhum arquivo de palavras foi encontrado em: ../resources/words.txt`
 
 **Tentativa de abrir um arquivo de palavras contendo caracteres que não estejam entre [a- z|A - Z] , ‘(espaço em branco) ou hífen ‘-’.**
 
 - Execução:
 
-`./forca ./resources/testePalavras-caractereInvalido.txt ./resources/scores.txt`
+`./forca ../resources/testePalavras-caractereInvalido.txt ../resources/scores.txt`
 
 - Saída esperada:
 
@@ -40,7 +49,7 @@ Leia o documento de especificação contido em [Especificação do Trabalho 1](h
 
 - Execução:
 
-`./forca ./resources/testePalavras-palavraInvalida.txt ./resources/scores.txt`
+`./forca ../resources/testePalavras-palavraInvalida.txt ../resources/scores.txt`
 
 - Saída esperada:
 
@@ -50,7 +59,7 @@ Leia o documento de especificação contido em [Especificação do Trabalho 1](h
 
 - Execução:
 
-`./forca ./resources/testePalavras-semfrequencia.txt ./resources/scores.txt`
+`./forca ..testePalavras-semfrequencia.txt ../resources/scores.txt`
 
 - Saída esperada:
 
@@ -60,7 +69,7 @@ Leia o documento de especificação contido em [Especificação do Trabalho 1](h
 
 - Execução:
 
-`./forca ./resources/testePalavras-frequenciaInvalida.txt ./resources/scores.txt`
+`./forca ../resources/testePalavras-frequenciaInvalida.txt ../resources/scores.txt`
 
 - Saída esperada:
 
@@ -72,17 +81,17 @@ Leia o documento de especificação contido em [Especificação do Trabalho 1](h
 
 - Execução:
 
-`./forca ./resources/words_2000.txt ./resources/scoresTest.txt`
+`./forca ../resources/words_2000.txt ../resources/scoresTest.txt`
 
 - Saída esperada:
 
-`>>> Erro! Nenhum arquivo de scores foi encontrado em: ./resources/scoresTest.txt`
+`>>> Erro! Nenhum arquivo de scores foi encontrado em: ../resources/scoresTest.txt`
 
 **Tentativa de abrir um arquivo de scores com a presença de mais ou menos ';' em alguma linha.**
 
 - Execução:
 
-`./forca ./resources/words_2000.txt ./resources/testeScores-erroScores.txt`
+`./forca ../resources/words_2000.txt ../resources/testeScores-erroScores.txt`
 
 - Saída esperada:
 
@@ -92,7 +101,7 @@ Leia o documento de especificação contido em [Especificação do Trabalho 1](h
 
 - Execução:
 
-`./forca ./resources/words_2000.txt ./resources/testeScores-dificuldadeVazio.txt`
+`./forca ../resources/words_2000.txt ../resources/testeScores-dificuldadeVazio.txt`
 
 - Saída esperada:
 
@@ -102,7 +111,7 @@ Leia o documento de especificação contido em [Especificação do Trabalho 1](h
 
 - Execução:
 
-`./forca ./resources/words_2000.txt ./resources/testeScores-nomeVazio.txt`
+`./forca ../resources/words_2000.txt ../resources/testeScores-nomeVazio.txt`
 
 - Saída esperada:
 
@@ -113,7 +122,7 @@ Leia o documento de especificação contido em [Especificação do Trabalho 1](h
 
 - Execução:
 
-`./forca ./resources/words_2000.txt ./resources/testeScores-pontuacaoVazio.txt`
+`./forca ../resources/words_2000.txt ../resources/testeScores-pontuacaoVazio.txt`
 
 - Saída esperada:
 

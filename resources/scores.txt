@@ -22,3 +22,5 @@ Facil;AFONSO MOREIRA;;-4
 Facil;ana;;-1
 Facil;teste;;0
 Facil;teste;PALAVRA COMPOSTA;15
+Facil;W;;-6
+Facil;teste;;-1
