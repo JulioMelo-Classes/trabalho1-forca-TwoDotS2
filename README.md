@@ -10,7 +10,6 @@ Leia o documento de especificação contido em [Especificação do Trabalho 1](h
 **Compilando o programa**
 
 ```
-mkdir build
 cd build
 cmake ..
 cmake --build .
@@ -19,6 +18,10 @@ cmake --build .
 
 ```
 ./forca ../resources/words_2000.txt ../resources/scores.txt
+```
+ou
+```
+bash forca.sh
 ```
 
 # 2. Testes e saídas esperadas
