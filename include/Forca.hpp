@@ -44,7 +44,7 @@ private:
 public:
 
     /**
-     * Cria a um objeto Forca
+     * Cria um objeto Forca
      * O construtor pode ou não validar os arquivos de entrada, no entanto, mesmo com
      * os arquivos inválidos o objeto deve ser construído. Para o caso de arquivos de palavras
      * ou scores inválidos, use o método eh_valido.
@@ -193,13 +193,22 @@ public:
     /////////////////////////////////////////////////////////////////////////
     /////////// Getters e Setters
     //////////////////////////////////////////////
-    //[NÃO UTILIZADA]
+
     /**
-     * Retorna a quantidade de tentativas restantes.
-     * @return a quantidade de tentativas restantes.
+     * Verifica se ainda existem palavras em m_palavras_do_jogo. Essa função é muito importante para o sistema, uma vez
+     * que a lógica de troca da palavra_atual é a remoção do última palavra de m_palavras_do_jogo
+     * @return F, caso o tamanho m_palavras_do_jogo é igual a zero,
+     *         T, caso contrário.
+     * 
+     * OBS.: é um "getter de estado".
      */
+    bool restam_palavras();
 
 
+    /**
+     * Retorna o caminho do arquivo de scores.
+     * @return o caminho do arquivo de scores.
+     */
     std::string get_arquivo_scores();
 
     /**
@@ -219,14 +228,29 @@ public:
      **/
     std::string get_palavra_atual();
 
+     /**
+     * Retorna o valor de m_tentativas_restantes.
+     * @return o valor de m_tentativas_restantes
+     */
+    int get_tentativas_restantes();
+
+     /**
+     * Retorna o valor de m_letras_palpitadas.
+     * @return o valor de m_letras_palpitadas
+     */
+    std::vector<char> get_letras_palpitadas();
+    
+    /**
+     * Retorna o valor de m_pontos.
+     * @return o valor de m_pontos
+     */
+    int get_pontos();
 
     /**
-     * Verifica se ainda existem palavras em m_palavras_do_jogo. Essa função é muito importante para o sistema, uma vez
-     * que a lógica de troca da palavra_atual é a remoção do última palavra de m_palavras_do_jogo
-     * @return F, caso o tamanho m_palavras_do_jogo é igual a zero,
-     *         T, caso contrário.
+     * Retorna o valor de m_dificuldade.
+     * @return o valor de m_dificuldade
      */
-    bool restam_palavras();
+    Dificuldade get_dificuldade();
 
     /**
      * Modifica a dificuldade do jogo.
@@ -237,15 +261,13 @@ public:
      */
     void set_dificuldade(Dificuldade d);
 
-    int get_tentativas_restantes();
-
-    std::vector<char> get_letras_palpitadas();
-    
-    int get_pontos();
-
+    /**
+     * Adiciona ao vetor m_palavras_acertadas a palvra acertada.
+     * Método auxiliar para o registro de scores do jogo.
+     * @param palavra a palavra acertada;
+     * @see proxima_palavra
+     */
     void set_palavras_acertadas(std::string palavra);
-
-    Dificuldade get_dificuldade();
 
 private:
     //<! As funções inserir_filtradas_(dificuldade) auxiliam na modularização de inserir
@@ -270,7 +292,12 @@ private:
      */
     void inserir_filtradas_dificil(int qtd_filtradas);
 
+    /** Define o valor de m_palavra atual.
+     * Auxiliar da função proxima_rodada();
+     * @see proxima_rodada
+     */
     void set_palavra_atual(std::string p);
+
     /**
      * Escrever a m_palavra_jogada no formato _ _ _ ... _. É um método privado porque sempre que m_palavra_atual for definida
      * por proxima_palavra(), é direta a necessidade de definir m_palavra_jogada.

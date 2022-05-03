@@ -2,10 +2,14 @@
 
 class ForcaMenus{
     
-    private:
-        Forca *m_forca;
+private:
+    Forca *m_forca; //<! Um ponteiro para o objeto do jogo a ser instânciado no main
 
-    public:
+public:
+    /**
+     * Cria um objeto ForcaMenus
+     */
+
     ForcaMenus(Forca*);
 
     /**
