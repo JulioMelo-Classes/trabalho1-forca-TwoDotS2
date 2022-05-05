@@ -546,6 +546,20 @@ void Forca::registrar_score(){
     std::cin.ignore();
     std::getline(std::cin, nome);
     
+   //Validar nome de entrada
+    bool valido = false;
+    while(!valido)
+    for (char &ch : nome)
+    {
+      valido = true;
+      if (ch == ';'){
+                  std::cout <<  "Nome inválido. Escolha um sem \";\"." << std::endl;
+                  std::getline(std::cin, nome);
+                  valido = false;
+                  break;
+            }
+      }
+    
     score_formated = score_formated + nome + ";";
 
     std::cout << "------------------------------------------------------------------------------------------" << std::endl;
