@@ -39,7 +39,7 @@ bash forca.sh
 
 `>>> Erro! Nenhum arquivo de palavras foi encontrado em: ../resources/words.txt`
 
-**Tentativa de abrir um arquivo de palavras contendo caracteres que não estejam entre [a- z|A - Z] , ‘(espaço em branco) ou hífen ‘-’.**
+**Tentativa de abrir um arquivo de palavras contendo caracteres que não estejam entre [a- z|A - Z] , ou hífen ‘-’.**
 
 - Execução:
 
