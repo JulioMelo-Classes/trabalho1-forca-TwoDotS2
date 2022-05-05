@@ -558,6 +558,8 @@ void Forca::registrar_score(){
                   break;
             }
       }
+    
+    //Caso o nome do usuário seja maior que 30 caracteres, limitar o nome para os 30 primeiros digitados.
     if((int) nome.size() > 30) nome.resize(30);
 
     score_formated = score_formated + nome + ";";
