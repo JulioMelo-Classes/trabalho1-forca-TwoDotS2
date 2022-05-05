@@ -10,6 +10,7 @@ Leia o documento de especificação contido em [Especificação do Trabalho 1](h
 **Compilando o programa**
 
 ```
+mkdir build
 cd build
 cmake ..
 cmake --build .
