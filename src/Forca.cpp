@@ -531,18 +531,17 @@ void Forca::reset_all(){
 }
 
 void Forca::registrar_score(){
-  //Falta filtrar e formatar as entrada de nome de usuário com acento
     std::vector<std::string> dificuldades = {"Facil", "Medio", "Dificil"};
     //score_formatted: 'Dificuldade' ; 'Nome' ; ['Palavras'] ;
     std::string score_formated, nome;
 
-    //Dificuldade
+//Dificuldade
     score_formated = dificuldades[m_dificuldade] + ";";
     
-    //Nome
-    std::cout <<  "Qual nome quer colocar no \"Menu de Scores\"? ";
+//Nome
+    std::cout <<  "Qual nome quer colocar no \"Menu de Scores\"? (30 caractéres)";
     
-  //Aceitar nome composto
+    //Aceitar nome composto
     std::cin.ignore();
     std::getline(std::cin, nome);
     
@@ -553,13 +552,14 @@ void Forca::registrar_score(){
     {
       valido = true;
       if (ch == ';'){
-                  std::cout <<  "Nome inválido. Escolha um sem \";\"." << std::endl;
+                  std::cout <<  "Nome inválido. Escolha um sem \";\". Nome:  " ;
                   std::getline(std::cin, nome);
                   valido = false;
                   break;
             }
       }
-    
+    if((int) nome.size() > 30) nome.resize(30);
+
     score_formated = score_formated + nome + ";";
 
     std::cout << "------------------------------------------------------------------------------------------" << std::endl;
