@@ -29,7 +29,7 @@ bash forca.sh
 
 ## 2.1. Testes do arquivo de palavras
 
-**Tentativa de abrir um arquivo de palavras não existente.**
+**a) Tentativa de abrir um arquivo de palavras não existente.**
 
 - Execução:
 
@@ -39,7 +39,7 @@ bash forca.sh
 
 `>>> Erro! Nenhum arquivo de palavras foi encontrado em: ../resources/words.txt`
 
-**Tentativa de abrir um arquivo de palavras contendo caracteres que não estejam entre [a- z|A - Z] , ‘(espaço em branco) ou hífen ‘-’.**
+**b) Tentativa de abrir um arquivo de palavras contendo caracteres que não estejam entre [a- z|A - Z] , (espaço em branco) ou hífen ‘-’.**
 
 - Execução:
 
@@ -49,7 +49,7 @@ bash forca.sh
 
 `>>> Erro! Caractere inválido localizado na palavra: tçmbem (linha 1)`
 
-**Tentativa de abrir um arquivo de palavras contendo uma palavra de tamanho menor ou igual a 4.**
+**c) Tentativa de abrir um arquivo de palavras contendo uma palavra de tamanho menor ou igual a 4.**
 
 - Execução:
 
@@ -59,7 +59,7 @@ bash forca.sh
 
 `>>> Erro! Palavra com tamanho menor ou igual a 4: piu (linha 1)`
 
-**Tentativa de abrir um arquivo de palavras sem frequência.**
+**d) Tentativa de abrir um arquivo de palavras sem frequência.**
 
 - Execução:
 
@@ -69,7 +69,7 @@ bash forca.sh
 
 `>>> Erro! Não existe frequência referente à palavra: Brasil (linha 1)`
 
-**Tentativa de abrir um arquivo de palavras com uma frequência não pertencente aos inteiros positivos.**
+**e) Tentativa de abrir um arquivo de palavras com uma frequência não pertencente aos inteiros positivos.**
 
 - Execução:
 
@@ -81,7 +81,7 @@ bash forca.sh
 
 ## 2.2. Testes do arquivo de scores
 
-**Tentativa de abrir um arquivo de scores não existente.**
+**a) Tentativa de abrir um arquivo de scores não existente.**
 
 - Execução:
 
@@ -91,7 +91,7 @@ bash forca.sh
 
 `>>> Erro! Nenhum arquivo de scores foi encontrado em: ../resources/scoresTest.txt`
 
-**Tentativa de abrir um arquivo de scores com a presença de mais ou menos ';' em alguma linha.**
+**b) Tentativa de abrir um arquivo de scores com a presença de mais ou menos ';' em alguma linha.**
 
 - Execução:
 
@@ -101,7 +101,7 @@ bash forca.sh
 
 `>>> Erro! Presença de 4 ';' na linha 1 do arquivo de scores [Esperado: 3]`
 
-**Tentativa de abrir um arquivo de scores com o campo "nível de dificuldade” vazio.**
+**c) Tentativa de abrir um arquivo de scores com o campo "nível de dificuldade” vazio.**
 
 - Execução:
 
@@ -111,7 +111,7 @@ bash forca.sh
 
 `>>> Erro! Campo Nível de dificuldade vazio no arquivo de scores (linha 1)`
 
-**Tentativa de abrir um arquivo de scores com o campo "nome” vazio.**
+**d) Tentativa de abrir um arquivo de scores com o campo "nome” vazio.**
 
 - Execução:
 
@@ -122,7 +122,7 @@ bash forca.sh
 `>>> Erro! Campo Nome vazio no arquivo de scores (linha 1)`
 
 
-**Tentativa de abrir um arquivo de scores com o campo "pontuação” vazio.**
+**e) Tentativa de abrir um arquivo de scores com o campo "pontuação” vazio.**
 
 - Execução:
 

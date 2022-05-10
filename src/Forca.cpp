@@ -390,22 +390,25 @@ std::pair<bool, bool> Forca::palpite(std::string palpite)
 void Forca::dica_palavra_jogada()
 {
     std::srand(unsigned(std::time(0)));
-    std::vector<int> last_indexes;
+
+    std::vector<int> indices_ja_selecionados;
+    
     std::vector<int>::iterator it;
+    //Variável para guardar o número aleatório gerado, dependendo do tamanho da m_palavra atual
     int random;
 
-    // Preciso garantir que vai acontecer
     if (m_dificuldade == Forca::FACIL)
     {
+        //Quantidade de caracteres revelados
         int num = std::max(1, (int)m_palavra_atual.size() / 5), count = 0;
+        
         while (count < num)
         {
-
             random = rand() % ((int)m_palavra_atual.size() - 1);
-            it = std::find(last_indexes.begin(), last_indexes.end(), random);
+            it = std::find(indices_ja_selecionados.begin(), indices_ja_selecionados.end(), random);
 
             // Se o índice não foi sorteado ainda
-            if (it == last_indexes.end())
+            if (it == indices_ja_selecionados.end())
             {
                 // Se o caracter no índice não sorteado não é uma vogal
                 if ((m_palavra_atual[random] != 'A') && (m_palavra_atual[random] != 'E') &&
@@ -415,7 +418,7 @@ void Forca::dica_palavra_jogada()
                     count++;
                 }
 
-                last_indexes.push_back(random);
+                indices_ja_selecionados.push_back(random);
             }
         }
     }
