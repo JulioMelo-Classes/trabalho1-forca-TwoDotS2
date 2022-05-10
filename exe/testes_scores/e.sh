@@ -1,0 +1,1 @@
+./../../build/forca ../../resources/words_2000.txt ../../resources/testeScores-pontuacaoVazio.txt

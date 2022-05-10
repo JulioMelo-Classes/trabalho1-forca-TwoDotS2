@@ -1,0 +1,1 @@
+./../../build/forca ../../resources/testePalavras-palavraInvalida.txt ../../resources/scores.txt

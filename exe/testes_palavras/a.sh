@@ -1,0 +1,1 @@
+./../../build/forca ../../resources/words.txt ../../resources/scores.txt

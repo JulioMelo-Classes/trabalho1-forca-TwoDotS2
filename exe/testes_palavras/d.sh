@@ -1,0 +1,1 @@
+./../../build/forca ../../resources/testePalavras-semfrequencia.txt ../../resources/scores.txt
